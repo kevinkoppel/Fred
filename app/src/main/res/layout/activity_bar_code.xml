@@ -2,12 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:id="@+id/barcodeContainer"
+    >
 
     <fragment
+        android:id="@+id/scannerFragment"
         android:name="com.example.myfirstapp.BarcodeFragment"
-        android:id="@+id/fooFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="243dp" />
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.myfirstapp.CartFragment"
+        android:layout_width="match_parent"
+        android:layout_height="490dp" />
 
 </LinearLayout>
