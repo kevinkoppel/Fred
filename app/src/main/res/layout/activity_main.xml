@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/Logo"
+        style="@style/Widget.AppCompat.TextView.SpinnerItem"
+        android:layout_width="155dp"
+        android:layout_height="87dp"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:text="Fred"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#2461DB"
+        android:textSize="60sp"
+        app:fontFamily="@font/actor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.554"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="247dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="52dp"
+        android:gravity="center"
+        android:text="Tere Toomas!"
+        android:textColor="@android:color/black"
+        android:textColorHighlight="@android:color/holo_blue_dark"
+        android:textColorLink="#000F0E0E"
+        android:textSize="30sp"
+        app:fontFamily="@font/alegreya"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Logo" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="328dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:text="Meeldivat ostlemist"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        app:fontFamily="@font/alegreya"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/secondActivityBtn"
+        android:layout_width="158dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="56dp"
+        android:background="@drawable/mybutton"
+        android:text="Ostle"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
