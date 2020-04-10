@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class BarCodeActivity extends AppCompatActivity implements BarcodeFragment.FragmentAListener {
+public class BarCodeActivity extends AppCompatActivity  {
 private CartFragment cartFragment;
 
     @Override
@@ -16,10 +16,7 @@ private CartFragment cartFragment;
 
     }
 
-    @Override
-    public void onInputASent(String input) {
-        CartFragment.updateText(input);
-    }
+
 
 //ToDo: scanner fragmenidina saada
 //ToDo: saada triipkoodi põhjal andmebaasist toode

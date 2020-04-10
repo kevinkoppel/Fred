@@ -20,12 +20,6 @@ public class CartFragment extends Fragment  {
         showReceivedData = (TextView) view.findViewById(R.id.resultCode);
         return view;
 
-
-
     }
 
-
-    public static void updateText(String newText){
-        showReceivedData.setText(newText);
-    }
 }
