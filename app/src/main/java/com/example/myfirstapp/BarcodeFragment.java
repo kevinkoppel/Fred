@@ -18,6 +18,8 @@ import com.google.zxing.Result;
 
 public class BarcodeFragment extends Fragment  {
     private CodeScanner mCodeScanner;
+    String barcodeResult;
+   // RetrieveFeedTask aTask = new RetrieveFeedTask(barcodeResult);
 
 
     @Nullable
@@ -35,6 +37,10 @@ public class BarcodeFragment extends Fragment  {
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        barcodeResult = result.getText();
+
+                        RetrieveFeedTask aTask = new RetrieveFeedTask(barcodeResult);
+                        aTask.execute();
 
                         Toast.makeText(activity.getApplicationContext(), result.getText(), Toast.LENGTH_SHORT).show();
 

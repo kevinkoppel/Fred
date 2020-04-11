@@ -1,6 +1,7 @@
 package com.example.myfirstapp;
 
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,21 +15,35 @@ import java.net.URL;
 public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
     Product productFromDatabase;
-    String resultString;
+    String resultString = null;
+
+    
+
+
 
     public RetrieveFeedTask(String barcodeResult){
         resultString = barcodeResult;
+        
     }
+    
 
     protected void onPreExecute() {
+
 
     }
 
     protected String doInBackground(Void... urls) {
+        Log.e("ASyncTask", "doinbackground");
 
         try {
-            URL url = new URL("https://api.appery.io/rest/1/apiexpress/api/example/Products?apiKey=12345678&Barcode=" + resultString);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            URL url = new URL("https://api.appery.io/rest/1/apiexpress/api/Rimi_Database/Products_Rimi/Products?apiKey=27ace6b1-be6d-4e94-933d-22a6770c0721&Barcode=87654321");
+            StringBuilder sb = new StringBuilder("https://api.appery.io/rest/1/apiexpress/api/Rimi_Database/Products_Rimi/Products?apiKey=27ace6b1-be6d-4e94-933d-22a6770c0721&Barcode=");
+            sb.append(resultString);
+            String fullUrlString = sb.toString();
+            URL fullUrl = new URL(fullUrlString);
+
+
+            HttpURLConnection urlConnection = (HttpURLConnection) fullUrl.openConnection();
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                 StringBuilder stringBuilder = new StringBuilder();
@@ -51,15 +66,33 @@ public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
     }
 
     protected void onPostExecute(String response) {
+        Log.e("ASyncTask", "onPostExecute");
 
 
         if(response == null) {
             response = "THERE WAS AN ERROR";
         }
 
-        Log.i("INFO", response);
+        Bundle bundle = new Bundle();
+        CartFragment frag = new CartFragment();
+        bundle.putString("resultString", response);
+        frag.setArguments(bundle);
+        
 
-         deSerializeProduct(response);
+
+       /* Fragment currentFragment = cartFrag.getActivity().getSupportFragmentManager().findFragmentById(R.id.cartFragment);
+        FragmentTransaction fragmentTransaction = currentFragment.getFragmentManager().beginTransaction();
+        fragmentTransaction.detach(currentFragment);
+        fragmentTransaction.attach(currentFragment);
+        fragmentTransaction.commit();*/
+        
+       // deSerializeProduct(response);
+
+
+        Log.e("asynctask", response);
+
+
+
 
     }
 
@@ -80,6 +113,13 @@ public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+     //   Log.e("asynctask", productFromDatabase.getProduct());
+
+
 
     }
+
+
+
+
 }
