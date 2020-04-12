@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,6 +21,7 @@ import java.net.URL;
 public class CartFragment extends Fragment   {
 
     static TextView showReceivedData1;
+    Product productFromDatabase;
 
 
     private String resultString = "algus";
@@ -128,8 +132,8 @@ public class CartFragment extends Fragment   {
         fragmentTransaction.attach(currentFragment);
         fragmentTransaction.commit();*/
 
-            // deSerializeProduct(response);
-            showReceivedData1.setText(response);
+             deSerializeProduct(response);
+          //  showReceivedData1.setText(response);
 
 
             Log.e("asynctask", response);
@@ -138,6 +142,29 @@ public class CartFragment extends Fragment   {
 
 
         }
+    }
+    public void deSerializeProduct(String response){
+        response = response.substring(1,response.length() - 3);
+
+        StringBuilder stringBuilder = new StringBuilder(response);
+
+        stringBuilder.append(",\"productId\":\"23323123sdasd\"}"); // for testing
+        String responseToDeSerialize = stringBuilder.toString();
+
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+
+            productFromDatabase = mapper.readValue(responseToDeSerialize, Product.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //   Log.e("asynctask", productFromDatabase.getProduct());
+        showReceivedData1.setText(productFromDatabase.getProduct());
+
+
+
     }
 
 

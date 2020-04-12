@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
-    Product productFromDatabase;
+    Product productr;
     String resultString = null;
 
 
@@ -114,7 +114,7 @@ public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
         try {
 
-            productFromDatabase = mapper.readValue(responseToDeSerialize, Product.class);
+            productr = mapper.readValue(responseToDeSerialize, Product.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
