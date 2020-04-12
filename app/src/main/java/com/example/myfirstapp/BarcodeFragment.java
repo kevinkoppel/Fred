@@ -1,6 +1,7 @@
 package com.example.myfirstapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +18,13 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
 
 public class BarcodeFragment extends Fragment  {
+    private BarCodeFragmentListener listener;
     private CodeScanner mCodeScanner;
     String barcodeResult;
    // RetrieveFeedTask aTask = new RetrieveFeedTask(barcodeResult);
+    public interface BarCodeFragmentListener {
+        void onInputSent(String result);
+   }
 
 
     @Nullable
@@ -30,6 +35,7 @@ public class BarcodeFragment extends Fragment  {
         final Activity activity = getActivity();
         View root = inflater.inflate(R.layout.barcode_fragment, container, false);
         CodeScannerView scannerView = root.findViewById(R.id.scanner_view);
+
         mCodeScanner = new CodeScanner(activity, scannerView);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
@@ -38,9 +44,14 @@ public class BarcodeFragment extends Fragment  {
                     @Override
                     public void run() {
                         barcodeResult = result.getText();
+                        listener.onInputSent(barcodeResult);
 
-                        RetrieveFeedTask aTask = new RetrieveFeedTask(barcodeResult);
-                        aTask.execute();
+
+
+
+                    //    RetrieveFeedTask aTask = new RetrieveFeedTask(barcodeResult);
+                    //    aTask.execute();
+
 
                         Toast.makeText(activity.getApplicationContext(), result.getText(), Toast.LENGTH_SHORT).show();
 
@@ -72,6 +83,22 @@ public class BarcodeFragment extends Fragment  {
         mCodeScanner.releaseResources();
         super.onPause();
     }
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        if (context instanceof  BarCodeFragmentListener){
+            listener = (BarCodeFragmentListener) context;
+        }else {
+            throw new RuntimeException(context.toString()
+            + "mus implement barcodefragment listener");
+        }
+    }
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        listener = null;
+    }
+
 
 
 

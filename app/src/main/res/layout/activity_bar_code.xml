@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/barcodeContainer"
-    >
+    tools:context="com.example.myfirstapp.BarCodeActivity">
 
-    <fragment
-        android:id="@+id/scannerFragment"
-        android:name="com.example.myfirstapp.BarcodeFragment"
+
+
+    <FrameLayout
+        android:id="@+id/barcodeContainer"
         android:layout_width="match_parent"
         android:layout_height="243dp" />
-
-    <fragment
-        android:id="@+id/cartFragment"
-        android:name="com.example.myfirstapp.CartFragment"
+    <FrameLayout
+        android:id="@+id/cartContainer"
         android:layout_width="match_parent"
         android:layout_height="490dp" />
+
+
 
 </LinearLayout>

@@ -17,6 +17,7 @@ public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
     Product productFromDatabase;
     String resultString = null;
 
+
     
 
 
@@ -28,6 +29,8 @@ public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
     
 
     protected void onPreExecute() {
+
+
 
 
     }
@@ -77,7 +80,9 @@ public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
         CartFragment frag = new CartFragment();
         bundle.putString("resultString", response);
         frag.setArguments(bundle);
-        
+
+
+
 
 
        /* Fragment currentFragment = cartFrag.getActivity().getSupportFragmentManager().findFragmentById(R.id.cartFragment);
