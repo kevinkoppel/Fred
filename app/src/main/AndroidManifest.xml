@@ -18,6 +18,7 @@
         <activity android:name=".Popup"></activity>
         <activity android:name=".SecondActivity" />
         <activity android:name=".SignUpActivity"/>
+        <activity android:name=".LoginActivity"/>
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
             >

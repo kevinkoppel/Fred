@@ -50,25 +50,17 @@
                 android:textColorHint="#2461DB" />
 
             <Button
-                android:id="@+id/buttonSignUp"
+                android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="7dp"
                 android:background="@drawable/rounded_button_transparent"
-                android:text="Registreeri"
+                android:text="Logi sisse"
                 android:textAllCaps="false"
                 android:textColor="#2461DB" />
 
-            <TextView
-                android:id="@+id/textViewLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="Oled juba kasutaja? Logi sisse"
-                android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="#2461DB" />
+
 
 
         </LinearLayout>
@@ -98,6 +90,19 @@
             android:text="Fred"
             android:textColor="#2461DB"
             android:textSize="60sp" />
+
+        <Button
+            android:id="@+id/BackButton"
+            android:layout_width="66dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+
+            android:background="@drawable/ic_action_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </RelativeLayout>

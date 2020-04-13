@@ -40,23 +40,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUser.getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            String idToken = task.getResult().getToken();
-                            Toast.makeText(getApplicationContext(), idToken, Toast.LENGTH_SHORT).show();
-                            // Send token to your backend via HTTPS
-                            // ...
-                        } else {
-                            Toast.makeText(getApplicationContext(), "You arent registered", Toast.LENGTH_SHORT).show();
-                            Intent signUpIntent = new Intent(getApplicationContext(), SignUpActivity.class);
-                            startActivity(signUpIntent);
 
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (mUser != null) {
+            mUser.getIdToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+                                Toast.makeText(getApplicationContext(), idToken, Toast.LENGTH_SHORT).show();
+                                // Send token to your backend via HTTPS
+                                // ...
+                            } else {
+                                Toast.makeText(getApplicationContext(), "You arent registered", Toast.LENGTH_SHORT).show();
+                                Intent signUpIntent = new Intent(getApplicationContext(), SignUpActivity.class);
+                                startActivity(signUpIntent);
+
+                            }
                         }
-                    }
-                });
+                    });
+        }
+        else {
+            Intent signUpIntent = new Intent(getApplicationContext(), SignUpActivity.class);
+            startActivity(signUpIntent);
+        }
+
+
+
+
 
        /* if (mAuth.getCurrentUser() == null) {
             Toast.makeText(getApplicationContext(), "You arent registered", Toast.LENGTH_SHORT).show();
