@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,10 +27,19 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Button secondActivityBtn = findViewById(R.id.secondActivityBtn);
+        ImageButton profileBtn = findViewById(R.id.profileButton);
         secondActivityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(),SecondActivity.class);
+                startActivity(startIntent);
+
+            }
+        });
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(),ProfileActivity.class);
                 startActivity(startIntent);
 
             }
@@ -48,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                             if (task.isSuccessful()) {
                                 String idToken = task.getResult().getToken();
-                                Toast.makeText(getApplicationContext(), idToken, Toast.LENGTH_SHORT).show();
+
                                 // Send token to your backend via HTTPS
                                 // ...
                             } else {

@@ -12,7 +12,7 @@
         style="@style/Widget.AppCompat.TextView.SpinnerItem"
         android:layout_width="155dp"
         android:layout_height="87dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="148dp"
         android:gravity="center"
         android:text="Fred"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -28,7 +28,7 @@
         android:id="@+id/textView3"
         android:layout_width="247dp"
         android:layout_height="55dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="56dp"
         android:gravity="center"
         android:text="Tere Toomas!"
         android:textColor="@android:color/black"
@@ -66,5 +66,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/profileButton"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_button4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

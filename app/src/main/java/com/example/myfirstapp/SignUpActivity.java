@@ -13,12 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -30,7 +28,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     String userId;
 
     private FirebaseAuth mAuth;
-    FirebaseFirestore fStore;
+    public FirebaseFirestore fStore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         mAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+
 
         findViewById(R.id.buttonSignUp).setOnClickListener(this);
         findViewById(R.id.textViewLogin).setOnClickListener(this);
@@ -83,22 +83,34 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 progressBar.setVisibility(View.GONE);
+
+
                 if (task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "You are registered", Toast.LENGTH_SHORT).show();
+
                     userId = mAuth.getCurrentUser().getUid();
-                    DocumentReference documentReference = fStore.collection("users").document(userId);
                     Map<String, Object> user = new HashMap<>();
                     user.put("Name", name);
                     user.put("Email", email);
-                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    fStore.collection("users")
+                            .document(userId)
+                            .set(user);
+
+
+
+
+                   // DocumentReference documentReference = fStore.collection("users").document(userId);
+
+                   /* documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                            Log.d("registration", "user profile is created" + userId) ;
                         }
-                    });
-                   /* finish();
-                    startActivity(new Intent(SignUpActivity.this, ProfileActivity.class));*/
+                    });*/
+                    Log.e("registration", "user profile is created" + userId);
+                    finish();
+                    startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                 } else {
 
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
@@ -109,6 +121,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     }
 
                 }
+                Toast.makeText(getApplicationContext(), "You are registered", Toast.LENGTH_SHORT).show();
             }
         });
 

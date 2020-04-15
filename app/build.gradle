@@ -48,4 +48,5 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
     implementation 'com.budiyev.android:code-scanner:2.1.0'
     implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
