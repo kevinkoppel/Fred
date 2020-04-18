@@ -1,5 +1,6 @@
 package com.example.myfirstapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,27 +9,53 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class ProductFragment extends Fragment {
+    public interface ProductFragmentListener {
+
+        void onProductSent(ProductForCart resultProduct);
+    }
+    private ProductFragmentListener listener;
 
     TextView price, product, quantity;
-    Button plus, minus;
+    Button plus, minus, addToCart;
     Product productFromDatabase;
     int quantityBox = 1;
     String nr, pr;
+    ProductForCart cartProduct;
+
+    private FirebaseAuth mAuth;
+    public FirebaseFirestore fStore;
+    String userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+
+        mAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+
+        userId = mAuth.getCurrentUser().getUid();
 
 
 
@@ -38,6 +65,8 @@ public class ProductFragment extends Fragment {
         quantity = view.findViewById(R.id.integer_number);
         plus = view.findViewById(R.id.increase);
         minus = view.findViewById(R.id.decrease);
+        addToCart = view.findViewById(R.id.addToCart);
+
 
         nr = String.valueOf(quantityBox);
 
@@ -55,6 +84,16 @@ public class ProductFragment extends Fragment {
                 decreaseInteger();
             }
         });
+        addToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cartProduct = new ProductForCart(productFromDatabase.getProductId(), productFromDatabase.getBarcode(), productFromDatabase.getProduct(), productFromDatabase.getPrice(), quantityBox);
+                addingToCartList();
+
+
+                listener.onProductSent(cartProduct);
+            }
+        });
 
 
 
@@ -62,6 +101,44 @@ public class ProductFragment extends Fragment {
         return view;
 
     }
+
+    private void addingToCartList() {
+
+        String saveCurrentTime, saveCurrentDate;
+
+        Calendar calForDate = Calendar.getInstance();
+
+        SimpleDateFormat currentDate = new SimpleDateFormat("MM dd, yyyy");
+        saveCurrentDate = currentDate.format(calForDate.getTime());
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+        saveCurrentTime = currentDate.format(calForDate.getTime());
+
+        DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List");
+
+        final HashMap<String, Object> cartMap = new HashMap<>();
+        cartMap.put("productID", cartProduct.getProductId());
+        cartMap.put("productName", cartProduct.getProduct());
+        cartMap.put("price", cartProduct.getPrice());
+        cartMap.put("date", saveCurrentDate);
+        cartMap.put("time", saveCurrentTime);
+        cartMap.put("quantity", cartProduct.getQuantity());
+
+        cartListRef.child("User View").child(userId).child("Products").child(cartProduct.getProductId())
+                .updateChildren(cartMap)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Log.e("addToCart", "added to cart");
+                            Toast.makeText(getContext(), "Toode on lisatud ostukorvi", Toast.LENGTH_LONG);
+
+                        }
+                    }
+                });
+
+    }
+
     public void updateEditText(String resultt){
 
 
@@ -182,12 +259,28 @@ public class ProductFragment extends Fragment {
             e.printStackTrace();
         }
         //   Log.e("asynctask", productFromDatabase.getProduct());
+
         product.setText(productFromDatabase.getProduct());
         pr = String.valueOf(productFromDatabase.getPrice());
         price.setText(pr);
 
 
 
+    }
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        if (context instanceof  ProductFragmentListener){
+            listener = (ProductFragmentListener) context;
+        }else {
+            throw new RuntimeException(context.toString()
+                    + "mus implement barcodefragment listener");
+        }
+    }
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        listener = null;
     }
 
 

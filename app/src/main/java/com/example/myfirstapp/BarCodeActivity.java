@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class BarCodeActivity extends AppCompatActivity implements BarcodeFragment.BarCodeFragmentListener {
+public class BarCodeActivity extends AppCompatActivity implements BarcodeFragment.BarCodeFragmentListener, ProductFragment.ProductFragmentListener {
 
 private ProductFragment productFragment;
 private CartFragment cartFragment;
@@ -57,10 +57,14 @@ public Bundle args = new Bundle();
         frag.updateEditText(result);*/
     }
 
+    @Override
+    public void onProductSent(ProductForCart resultProduct) {
+        CartFragment frag = (CartFragment) getSupportFragmentManager().findFragmentById(R.id.cartContainer);
+        frag.updateEditText(resultProduct.getProduct());
+        getSupportFragmentManager().beginTransaction().show(cartFragment).hide(productFragment).commit();
+    }
 
 
 
-    //ToDo: scanner fragmenidina saada
-//ToDo: saada triipkoodi põhjal andmebaasist toode
 
 }
