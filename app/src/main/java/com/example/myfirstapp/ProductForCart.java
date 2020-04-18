@@ -42,4 +42,24 @@ public class ProductForCart {
     public Integer getQuantity(){
         return quantity;
     }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }

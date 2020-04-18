@@ -31,6 +31,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-ml-vision:18.0.1'
     implementation 'com.google.firebase:firebase-ml-vision-barcode-model:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.3'
+    implementation 'com.firebaseui:firebase-ui-database:4.3.2'
     implementation 'com.wonderkiln:camerakit:0.13.1'
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
     implementation 'com.google.firebase:firebase-database:19.2.0'
