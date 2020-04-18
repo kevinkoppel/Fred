@@ -7,8 +7,6 @@
     android:orientation="vertical"
     tools:context="com.example.myfirstapp.BarCodeActivity">
 
-
-
     <FrameLayout
         android:id="@+id/barcodeContainer"
         android:layout_width="match_parent"
@@ -16,8 +14,13 @@
     <FrameLayout
         android:id="@+id/cartContainer"
         android:layout_width="match_parent"
-        android:layout_height="490dp" />
+        android:layout_height="490dp" >
 
+        <FrameLayout
+            android:id="@+id/productContainer"
+            android:layout_width="match_parent"
+            android:layout_height="490dp" />
+    </FrameLayout>
 
 
 </LinearLayout>

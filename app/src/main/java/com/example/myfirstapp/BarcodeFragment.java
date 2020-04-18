@@ -23,6 +23,7 @@ public class BarcodeFragment extends Fragment  {
     String barcodeResult;
    // RetrieveFeedTask aTask = new RetrieveFeedTask(barcodeResult);
     public interface BarCodeFragmentListener {
+
         void onInputSent(String result);
    }
 
@@ -44,10 +45,8 @@ public class BarcodeFragment extends Fragment  {
                     @Override
                     public void run() {
                         barcodeResult = result.getText();
+
                         listener.onInputSent(barcodeResult);
-
-
-
 
                     //    RetrieveFeedTask aTask = new RetrieveFeedTask(barcodeResult);
                     //    aTask.execute();

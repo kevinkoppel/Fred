@@ -12,19 +12,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.okhttp.OkHttpClient;
+import com.stripe.android.PaymentConfiguration;
+import com.stripe.android.Stripe;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
     FirebaseFirestore fStore;
     FirebaseAuth mAuth;
     String UserId;
+    private static final String backendUrl = "http://10.0.2.2:4242/";
+    private OkHttpClient httpClient = new OkHttpClient();
+    private String setupIntentClientSecret;
+    private Stripe stripe;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,11 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         fStore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        PaymentConfiguration.init(
+                getApplicationContext(),
+                "pk_test_LeeWGteI9v0CIJh8VcC2MHvx00VdhTXv9p"
+        );
+
 
 
         final EditText nimi = findViewById(R.id.nimi);
@@ -52,7 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String userId = mAuth.getCurrentUser().getUid();
+               /* String userId = mAuth.getCurrentUser().getUid();
                 DocumentReference docRef = fStore.collection("users").document(userId);
                 docRef.update("card no", "51231235432")
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -66,7 +78,8 @@ public class ProfileActivity extends AppCompatActivity {
                             public void onFailure(@NonNull Exception e){
                                 Log.w("card","Error updating document",e);
                             }
-                        });
+                        });*/
+
 
 
 
