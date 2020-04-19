@@ -117,8 +117,8 @@ public class ProductFragment extends Fragment {
         DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List");
 
         final HashMap<String, Object> cartMap = new HashMap<>();
-        cartMap.put("productID", cartProduct.getProductId());
-        cartMap.put("productName", cartProduct.getProduct());
+        cartMap.put("productId", cartProduct.getProductId());
+        cartMap.put("product", cartProduct.getProduct());
         cartMap.put("price", cartProduct.getPrice());
         cartMap.put("date", saveCurrentDate);
         cartMap.put("time", saveCurrentTime);

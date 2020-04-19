@@ -1,5 +1,6 @@
 package com.example.myfirstapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CartFragment extends Fragment   {
@@ -59,6 +63,14 @@ public class CartFragment extends Fragment   {
         pay = view.findViewById(R.id.payButton);
         empty = view.findViewById(R.id.emptyList);
 
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getActivity(), ConfirmPaymentActivity.class);
+                startActivity(startIntent);
+            }
+        });
+
          final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List");
         FirebaseRecyclerOptions<ProductForCart> options =
                 new FirebaseRecyclerOptions.Builder<ProductForCart>()
@@ -68,8 +80,10 @@ public class CartFragment extends Fragment   {
         FirebaseRecyclerAdapter<ProductForCart, CartViewHolder> adapter = new FirebaseRecyclerAdapter<ProductForCart, CartViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull CartViewHolder cartViewHolder, int i, @NonNull ProductForCart productForCart) {
-                cartViewHolder.txtProductName.setText(productForCart.getProduct());
-                cartViewHolder.txtProductQuantity.setText(productForCart.getQuantity().toString());
+                String productName = productForCart.getProduct();
+                String productQuantity = productForCart.getQuantity().toString();
+                cartViewHolder.txtProductName.setText(productName);
+                cartViewHolder.txtProductQuantity.setText(productQuantity);
                 cartViewHolder.txtProductPrice.setText(productForCart.getPrice().toString());
 
             }
@@ -86,11 +100,31 @@ public class CartFragment extends Fragment   {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
+        cartListRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    empty.setVisibility(View.INVISIBLE);
+                }else{
+                    empty.setText("Skanneerige toode, et lisada see ostukorvi");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
 
 
-        empty.setText(resultString);
+
+
+
+
+
+        //empty.setText(resultString);
 
 
 
@@ -99,7 +133,7 @@ public class CartFragment extends Fragment   {
     }
     public void updateEditText(String resultt) {
 
-        empty.setText(resultt);
+       // empty.setText(resultt);
     }
 
 

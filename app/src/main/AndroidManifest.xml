@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myfirstapp">
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
 
-
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,20 +12,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BarCodeActivity"></activity>
+        <activity
+            android:name=".ConfirmPaymentActivity"
+            android:label="@string/activity_confirm_payment"
+            ></activity>
+        <activity android:name=".BarCodeActivity" />
         <activity android:name=".ThirdActivity" />
-        <activity android:name=".Popup"></activity>
+        <activity android:name=".Popup" />
         <activity android:name=".SecondActivity" />
-        <activity android:name=".SignUpActivity"/>
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".ProfileActivity"/>
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            >
-
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-                android:value="barcode"/>
+                android:value="barcode" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

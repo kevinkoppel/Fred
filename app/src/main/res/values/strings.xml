@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyFirstApp</string>
+    <string name="activity_confirm_payment">ConfirmPaymentActivity</string>
 </resources>
