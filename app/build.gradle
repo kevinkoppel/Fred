@@ -51,4 +51,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.3.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.stripe:stripe-android:14.2.1'
+    implementation 'com.ebanx:swipe-button:0.4.0'
 }

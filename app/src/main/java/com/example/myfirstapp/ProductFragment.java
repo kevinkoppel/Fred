@@ -30,6 +30,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class ProductFragment extends Fragment {
     public interface ProductFragmentListener {
@@ -147,20 +148,28 @@ public class ProductFragment extends Fragment {
     }
 
     public void increaseInteger(){
-        quantityBox += 1;
-        nr = String.valueOf(quantityBox);
-        quantity.setText(nr);
-        double priceWithQuantity = productFromDatabase.getPrice() * quantityBox;
-        pr = String.valueOf(priceWithQuantity);
-        price.setText(pr);
+        if(quantityBox > 0) {
+            quantityBox += 1;
+            nr = String.valueOf(quantityBox);
+            quantity.setText(nr);
+            double priceWithQuantity = productFromDatabase.getPrice() * quantityBox;
+            pr = String.valueOf(priceWithQuantity);
+            price.setText(pr);
+        }else{
+            return;
+        }
     }
     public void decreaseInteger(){
-        quantityBox -= 1;
-        nr= String.valueOf(quantityBox);
-        quantity.setText(nr);
-        double priceWithQuantity = productFromDatabase.getPrice() * quantityBox;
-        pr = String.valueOf(priceWithQuantity);
-        price.setText(pr);
+        if(quantityBox > 1) {
+            quantityBox -= 1;
+            nr = String.valueOf(quantityBox);
+            quantity.setText(nr);
+            double priceWithQuantity = productFromDatabase.getPrice() * quantityBox;
+            pr = String.valueOf(priceWithQuantity);
+            price.setText(pr);
+        }else{
+            return;
+        }
 
     }
     public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
@@ -245,8 +254,10 @@ public class ProductFragment extends Fragment {
         response = response.substring(1,response.length() - 3);
 
         StringBuilder stringBuilder = new StringBuilder(response);
+        UUID uid = UUID.randomUUID();
+        String idString = uid.toString();
 
-        stringBuilder.append(",\"productId\":\"23323123sdasd\"}"); // for testing
+        stringBuilder.append(",\"productId\":\"" + idString + "\"}");
         String responseToDeSerialize = stringBuilder.toString();
 
 

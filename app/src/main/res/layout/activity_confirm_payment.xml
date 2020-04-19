@@ -7,6 +7,18 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ConfirmPaymentActivity"
     tools:showIn="@layout/activity_confirm_payment">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cartList2"
+        android:layout_width="397dp"
+        android:layout_height="190dp"
+
+        android:layout_below="@+id/pealkiri"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.102"></androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/button3"

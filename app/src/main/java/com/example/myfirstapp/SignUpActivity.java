@@ -97,17 +97,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             .document(userId)
                             .set(user);
 
-
-
-
-                   // DocumentReference documentReference = fStore.collection("users").document(userId);
-
-                   /* documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                           Log.d("registration", "user profile is created" + userId) ;
-                        }
-                    });*/
                     Log.e("registration", "user profile is created" + userId);
                     finish();
                     startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
