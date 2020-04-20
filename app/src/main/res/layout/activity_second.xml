@@ -7,102 +7,13 @@
     android:clickable="false"
     tools:context=".SecondActivity">
 
-    <TableLayout
-        android:id="@+id/simpleTableLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:foregroundGravity="bottom"
-        android:stretchColumns="1"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/storeList"
+        android:layout_width="387dp"
+        android:layout_height="358dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"> <!-- stretch the second column of the layout-->
-
-        <!-- first row of the table layout-->
-        <TableRow
-
-
-            android:layout_width="361dp"
-            android:layout_height="wrap_content">
-
-            <!-- first element of the row-->
-            <TextView
-
-
-                android:id="@+id/laagri"
-                android:layout_width="358dp"
-                android:layout_height="wrap_content"
-                android:background="#b0b0b0"
-                android:clickable="true"
-                android:foregroundGravity="center"
-                android:padding="18dip"
-                android:text="Laagri Coop               150m"
-                android:textColor="#000"
-                android:textSize="24dp" />
-
-
-        </TableRow>
-
-        <TableRow
-
-
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <!-- first element of the row-->
-            <TextView
-
-
-                android:id="@+id/must"
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:background="#b0b0b0"
-                android:clickable="true"
-                android:padding="18dip"
-                android:text="Mustamäe Coop        4km"
-                android:textColor="#000"
-                android:textSize="24dp" />
-
-
-        </TableRow>
-
-        <TableRow
-
-
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <!-- first element of the row-->
-            <TextView
-
-
-                android:id="@+id/lasn"
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:background="#b0b0b0"
-                android:clickable="true"
-                android:padding="18dip"
-                android:text="Lasnamäe Coop        15km"
-                android:textColor="#000"
-                android:textSize="24dp" />
-
-
-        </TableRow>
-    </TableLayout>
-
-    <Button
-        android:id="@+id/BackButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:text="Tagasi"
-        android:background="@drawable/backbutton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
