@@ -190,9 +190,10 @@ public class ProductFragment extends Fragment {
             Log.e("ASyncTask", "doinbackground");
 
             try {
-                URL url = new URL("https://api.appery.io/rest/1/apiexpress/api/Rimi_Database/Products_Rimi/Products?apiKey=27ace6b1-be6d-4e94-933d-22a6770c0721&Barcode=87654321");
-                StringBuilder sb = new StringBuilder("https://api.appery.io/rest/1/apiexpress/api/Rimi_Database/Products_Rimi/Products?apiKey=27ace6b1-be6d-4e94-933d-22a6770c0721&Barcode=");
+
+                StringBuilder sb = new StringBuilder("https://api.appery.io/rest/1/apiexpress/api/Rimi_tooted/Tooted/");
                 sb.append(resultString);
+                sb.append("?apiKey=365e3d7e-6f5b-458d-8be4-0e5e5d1260da");
                 String fullUrlString = sb.toString();
                 URL fullUrl = new URL(fullUrlString);
 
@@ -254,6 +255,8 @@ public class ProductFragment extends Fragment {
         response = response.substring(1,response.length() - 3);
 
         StringBuilder stringBuilder = new StringBuilder(response);
+        stringBuilder.insert(0, "{");
+        stringBuilder.append("\"");
         UUID uid = UUID.randomUUID();
         String idString = uid.toString();
 

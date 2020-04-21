@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,6 +54,16 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
         // fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         //   getLastLocation();
         getLocation();
+        Button test = findViewById(R.id.testButton);
+
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
+                startActivity(startIntent);
+            }
+        });
+
 
 
         recyclerView = findViewById(R.id.storeList);
