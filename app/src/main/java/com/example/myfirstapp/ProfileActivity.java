@@ -50,6 +50,14 @@ public class ProfileActivity extends AppCompatActivity {
         final EditText emailText = findViewById(R.id.email);
         TextView logout = findViewById(R.id.logout);
         Button addCardBtn = findViewById(R.id.addCard);
+        Button backButton = findViewById(R.id.BackButton2);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

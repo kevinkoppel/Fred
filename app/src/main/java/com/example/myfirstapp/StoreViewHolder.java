@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class StoreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     public TextView storeName, distanceToStore;
+    private ItemClickListener itemClickListener;
+    View mView = itemView;
 
     public StoreViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -20,6 +22,11 @@ public class StoreViewHolder extends RecyclerView.ViewHolder implements View.OnC
 
     @Override
     public void onClick(View v) {
+        itemClickListener.onClick(v, getAdapterPosition(), false);
 
+    }
+
+    public void setItemClickListener(ItemClickListener itemClickListener){
+        this.itemClickListener = itemClickListener;
     }
 }

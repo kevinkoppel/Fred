@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,15 +53,7 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
         // fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         //   getLastLocation();
         getLocation();
-        Button test = findViewById(R.id.testButton);
 
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
-                startActivity(startIntent);
-            }
-        });
 
 
 
@@ -70,6 +61,10 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
+
+
+
+
 
 
 
@@ -97,23 +92,33 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                 double storeLongitude = store.getLongitude();
 
 
-              /*  double theta = longitude - storeLongitude; //vb peab teistpidiolema
+                double theta = longitude - storeLongitude;
 
                 double dist = Math.sin(Math.toRadians(latitude)) * Math.sin(Math.toRadians(storeLatitude)) + Math.cos(Math.toRadians(latitude)) * Math.cos(Math.toRadians(storeLatitude)) * Math.cos(Math.toRadians(theta));
                 dist = Math.acos(dist);
                 dist = Math.toDegrees(dist);
                 dist = dist * 60 * 1.1515;
                 dist = dist * 0.8684;
-                distanceString = String.valueOf(dist);*/
-              final int R = 6371;
+                distanceString = df.format(dist);
+            /*  final int R = 6371;
                double latDistance = Math.toRadians(storeLatitude - latitude);
                double lonDistance = Math.toRadians(storeLongitude - longitude);
                double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
                        + Math.cos(Math.toRadians(latitude)) * Math.cos(Math.toRadians(storeLatitude))
                        * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
                 double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                double distance = R * c;
+                double distance = R * c * 1000;
                 distanceString = df.format(distance);
+
+             */
+                storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
+                        startActivity(startIntent);
+                    }
+                });
+
 
                 Log.e("store", distanceString);
                 Log.e("store", store.getStoreName());
@@ -121,7 +126,10 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                 storeViewHolder.distanceToStore.setText(distanceString);
                 storeViewHolder.storeName.setText(store.getStoreName());
 
+
+
             }
+
 
             @NonNull
             @Override
@@ -132,8 +140,10 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
             }
 
         };
+
         recyclerView.setAdapter(adapter);
         adapter.startListening();
+
 
     }
 
@@ -150,7 +160,7 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                 } else {
                     if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                        Location loc = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+                        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         latitude = loc.getLatitude();
                         longitude = loc.getLongitude();
                         return loc;
