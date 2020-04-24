@@ -72,21 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               /* String userId = mAuth.getCurrentUser().getUid();
-                DocumentReference docRef = fStore.collection("users").document(userId);
-                docRef.update("card no", "51231235432")
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("card","Card no added");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener(){
-                            @Override
-                            public void onFailure(@NonNull Exception e){
-                                Log.w("card","Error updating document",e);
-                            }
-                        });*/
+               
 
 
 
