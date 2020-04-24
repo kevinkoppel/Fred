@@ -17,9 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.okhttp.OkHttpClient;
-import com.stripe.android.PaymentConfiguration;
-import com.stripe.android.Stripe;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -27,10 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     FirebaseAuth mAuth;
     String UserId;
-    private static final String backendUrl = "http://10.0.2.2:4242/";
-    private OkHttpClient httpClient = new OkHttpClient();
-    private String setupIntentClientSecret;
-    private Stripe stripe;
+
 
 
     @Override
@@ -39,10 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         fStore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        PaymentConfiguration.init(
-                getApplicationContext(),
-                "pk_test_LeeWGteI9v0CIJh8VcC2MHvx00VdhTXv9p"
-        );
+
 
 
 
@@ -71,11 +62,8 @@ public class ProfileActivity extends AppCompatActivity {
         addCardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               
-
-
-
+                Intent startIntent = new Intent(getApplicationContext(),AddCardActivity.class);
+                startActivity(startIntent);
 
 
             }
