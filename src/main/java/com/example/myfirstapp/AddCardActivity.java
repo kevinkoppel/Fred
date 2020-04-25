@@ -17,9 +17,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -53,7 +57,8 @@ public class AddCardActivity extends AppCompatActivity {
     private com.example.myfirstapp.PaymentMethod paymentMethod;
     private FirebaseFirestore fStore;
     private FirebaseAuth mAuth;
-    private String UserId;
+    private String UserId, userEmail;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +104,7 @@ public class AddCardActivity extends AppCompatActivity {
                             // SetupIntent details.
                             setupIntentClientSecret = responseMap.get("clientSecret");
 
+
                             // Use the key from the server to initialize the Stripe instance.
                             stripe = new Stripe(getApplicationContext(), responseMap.get("publishableKey"));
                         }
@@ -107,6 +113,25 @@ public class AddCardActivity extends AppCompatActivity {
 
 
                 });
+        UserId = mAuth.getCurrentUser().getUid();
+        Log.e("document", UserId );
+        DocumentReference docRef = fStore.collection("users").document(UserId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()){
+                        Log.e("document", "DocumentSnapshot data: " + document.getData());
+                        userEmail = document.getString("Email");
+                    }else{
+                        Log.e("document", "No such document");
+                    }
+                }else {
+                    Log.e("document", "get failed with", task.getException());
+                }
+            }
+        });
 
         // Hook up the pay button to the card widget and stripe instance
         Button payButton = findViewById(R.id.payButton);
@@ -115,11 +140,12 @@ public class AddCardActivity extends AppCompatActivity {
             CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
             PaymentMethodCreateParams.Card card = cardInputWidget.getPaymentMethodCard();
 
+
             // Later, you will need to attach the PaymentMethod to the Customer it belongs to.
             // This example collects the customer's email to know which customer the PaymentMethod belongs to, but your app might use an account id, session cookie, etc.
-            EditText emailInput = findViewById(R.id.emailInput);
+
             PaymentMethod.BillingDetails billingDetails = (new PaymentMethod.BillingDetails.Builder())
-                    .setEmail(emailInput.getText().toString())
+                    .setEmail(userEmail)
                     .build();
             if (card != null) {
                 // Create SetupIntent confirm parameters with the above
