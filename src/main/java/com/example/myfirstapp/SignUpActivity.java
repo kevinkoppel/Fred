@@ -94,6 +94,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     user.put("Name", name);
                     user.put("Email", email);
                     user.put("paymentMethodId", "");
+                    user.put("customerId", "");
                     fStore.collection("users")
                             .document(userId)
                             .set(user);

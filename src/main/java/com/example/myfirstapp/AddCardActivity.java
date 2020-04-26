@@ -57,7 +57,7 @@ public class AddCardActivity extends AppCompatActivity {
     private com.example.myfirstapp.PaymentMethod paymentMethod;
     private FirebaseFirestore fStore;
     private FirebaseAuth mAuth;
-    private String UserId, userEmail;
+    private String UserId, userEmail, customerId;
 
 
     @Override
@@ -72,8 +72,13 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     private void loadPage() {
+        userEmail = mAuth.getCurrentUser().getEmail();
+        UserId = mAuth.getCurrentUser().getUid();
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(mediaType, "");
+        String json = "{"
+                + "\"email\":" + "\"" + userEmail + "\""
+                + "}";
+        RequestBody body = RequestBody.create(mediaType, json);
         Request request = new Request.Builder()
                 .url(backendUrl + "create-setup-intent")
                 .post(body)
@@ -103,6 +108,7 @@ public class AddCardActivity extends AppCompatActivity {
                             // The response from the server includes the Stripe publishable key and
                             // SetupIntent details.
                             setupIntentClientSecret = responseMap.get("clientSecret");
+                            customerId = responseMap.get("customerId");
 
 
                             // Use the key from the server to initialize the Stripe instance.
@@ -169,6 +175,7 @@ public class AddCardActivity extends AppCompatActivity {
             public void onSuccess(@NonNull SetupIntentResult result) {
                 SetupIntent setupIntent = result.getIntent();
                 SetupIntent.Status status = setupIntent.getStatus();
+                String resulrt = result.toString();
                 if (status == SetupIntent.Status.Succeeded) {
                     // Setup completed successfully
                     runOnUiThread(() -> {
@@ -237,12 +244,30 @@ public class AddCardActivity extends AppCompatActivity {
 
     private void addPaymentMethodToUsed(com.example.myfirstapp.PaymentMethod paymentMethodToAdd) {
         UserId = mAuth.getCurrentUser().getUid();
+
         Map<String, Object> user = new HashMap<>();
         user.put("paymentMethodId", paymentMethodToAdd.paymentMethodId);
 
         fStore.collection("users")
                 .document(UserId)
-                .update("paymentMethodId", paymentMethodToAdd.paymentMethodId)
+                .update("paymentMethodId", paymentMethodToAdd.getPaymentMethodId())
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("payment", "payment method added");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("payment", "error writing document", e);
+                    }
+                });
+        fStore.collection("users")
+                .document(UserId)
+                .update("customerId", customerId)
+
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -261,10 +286,6 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     public void deSerializeProduct(String response){
-
-
-
-
 
         ObjectMapper mapper = new ObjectMapper();
 

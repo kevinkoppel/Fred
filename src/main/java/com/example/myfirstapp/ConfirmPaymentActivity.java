@@ -1,5 +1,6 @@
 package com.example.myfirstapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.Stripe;
 
 import java.io.IOException;
@@ -52,6 +54,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
     private String paymentIntentClientSecret;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +62,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
 
         Button backButton = findViewById(R.id.button3);
-        Button payButton = findViewById(R.id.maksa);
+
         recyclerView = findViewById(R.id.cartList2);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -67,6 +70,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getCurrentUser().getUid();
+
+        pay();
 
 
 
@@ -84,13 +89,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
-        payButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pay();
 
-            }
-        });
 
         final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List");
         FirebaseRecyclerOptions<ProductForCart> options =
@@ -147,12 +146,11 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
     }
 
     private void pay() {
-
-
+        Button payButton = findViewById(R.id.maksa);
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         String json = "{"
-                + "\"currency\":\"usd\","
-                + "\"amount\": 5"
+                + "\"customer\":\"cus_HAZsHpvedICeBV\""
+                + "\"paymentMethod\": \"pm_1GbuGDLxS1yX5fKfUmtrDvKv\""
                 + "}";
 
         RequestBody body = RequestBody.create(mediaType, json);
@@ -160,8 +158,29 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                 .url(BACKEND_URL + "create-payment-intent")
                 .post(body)
                 .build();
+
         httpClient.newCall(request)
                 .enqueue(new PayCallback(this));
+
+        // .enqueue(new PayCallback(this));
+
+
+
+
+// Todo: makse postmanist toimib, nyyd tuleb siit ka toimima saada
+        payButton.setOnClickListener((View view) -> {
+           // PaymentMethodCreateParams params = new PaymentMethodCreateParams.Card.Builder().setNumber("4242424242424242").setCvc()
+            final Context context = getApplicationContext();
+            stripe = new Stripe(
+                    context,
+                    PaymentConfiguration.getInstance(context).getPublishableKey()
+            );
+           // stripe.confirmPayment(this,confirmParams);
+
+
+
+        });
+
 
 
     }
@@ -223,6 +242,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                 );
             } else {
                 activity.onPaymentSuccess(response);
+
             }
 
         }
