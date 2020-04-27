@@ -50,11 +50,8 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-        // fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        //   getLastLocation();
+
         getLocation();
-
-
 
 
         recyclerView = findViewById(R.id.storeList);
@@ -62,19 +59,6 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
 
-
-
-
-
-
-
-
-        /* if(checkPermissions() == true){
-            return;
-        }else{
-            Toast.makeText(getApplicationContext(), "Permission for using your location needed", Toast.LENGTH_SHORT);
-        }*/
-        // Log.e("location", latitude.toString());
 
         final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Stores");
         FirebaseRecyclerOptions<Store> options =
@@ -87,30 +71,45 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
             @Override
             protected void onBindViewHolder(@NonNull StoreViewHolder storeViewHolder, int i, @NonNull final Store store) {
                 DecimalFormat df = new DecimalFormat("#.#");
+                DecimalFormat df2 = new DecimalFormat("#");
                 String distanceString;
                 double storeLatitude = store.getLatitude();
                 double storeLongitude = store.getLongitude();
+                double userLatitude = latitude;
+                double userLongitude = longitude;
 
 
-                double theta = longitude - storeLongitude;
+               /* double theta = userLongitude - storeLongitude;
 
-                double dist = Math.sin(Math.toRadians(latitude)) * Math.sin(Math.toRadians(storeLatitude)) + Math.cos(Math.toRadians(latitude)) * Math.cos(Math.toRadians(storeLatitude)) * Math.cos(Math.toRadians(theta));
+                double dist = Math.sin(Math.toRadians(userLatitude)) * Math.sin(Math.toRadians(storeLatitude)) + Math.cos(Math.toRadians(userLatitude)) * Math.cos(Math.toRadians(storeLatitude)) * Math.cos(Math.toRadians(theta));
                 dist = Math.acos(dist);
                 dist = Math.toDegrees(dist);
                 dist = dist * 60 * 1.1515;
                 dist = dist * 0.8684;
-                distanceString = df.format(dist);
-            /*  final int R = 6371;
-               double latDistance = Math.toRadians(storeLatitude - latitude);
-               double lonDistance = Math.toRadians(storeLongitude - longitude);
-               double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                       + Math.cos(Math.toRadians(latitude)) * Math.cos(Math.toRadians(storeLatitude))
-                       * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-                double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                double distance = R * c * 1000;
-                distanceString = df.format(distance);
+                distanceString = df.format(dist);*/
 
-             */
+               double radius = 6471000.0;
+               double phiOne = userLatitude * Math.PI/180;
+               double phiTwo = storeLatitude * Math.PI/180;
+               double deltaPhi = (storeLatitude - userLatitude) * Math.PI/180;
+               double deltaLambda = (storeLongitude - userLongitude) * Math.PI/180;
+
+               double a = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2) + Math.cos(phiOne) * Math.cos(phiTwo) * Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
+               double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+               double dist = radius * c;
+
+               if(dist < 1000){
+                   distanceString = df2.format(dist) + "m";
+               }else{
+                   dist = dist /1000;
+                   distanceString = df.format(dist) + "km";
+               }
+
+
+
+
+
+
                 storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
