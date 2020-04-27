@@ -113,6 +113,7 @@ public class AddCardActivity extends AppCompatActivity {
 
                             // Use the key from the server to initialize the Stripe instance.
                             stripe = new Stripe(getApplicationContext(), responseMap.get("publishableKey"));
+
                         }
 
                     }

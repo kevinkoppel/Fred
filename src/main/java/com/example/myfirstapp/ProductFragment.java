@@ -144,6 +144,10 @@ public class ProductFragment extends Fragment {
 
 
         RetrieveFeedTask rf = new RetrieveFeedTask(resultt);
+        String setQuantityToOne = "1";
+        quantityBox = 1;
+
+        quantity.setText(setQuantityToOne);
         rf.execute();
     }
 

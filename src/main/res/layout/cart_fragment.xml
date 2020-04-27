@@ -33,7 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.102"></androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintVertical_bias="0.19"></androidx.recyclerview.widget.RecyclerView>
 
     <TextView
         android:id="@+id/emptyList"
@@ -58,10 +58,10 @@
         android:text="Maksma"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.048" />
 
     <TextView
         android:id="@+id/totalPrice"

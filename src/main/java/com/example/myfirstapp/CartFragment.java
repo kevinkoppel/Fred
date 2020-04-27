@@ -43,7 +43,7 @@ public class CartFragment extends Fragment   {
     String userId;
 
 
-    private Double oneItemTotalPrice = 0.0006;
+    private Double oneItemTotalPrice = 0.0;
     private Double totalPrice = 0.0;
 
 
@@ -102,18 +102,22 @@ public class CartFragment extends Fragment   {
                 cartViewHolder.txtProductName.setText(productName);
                 cartViewHolder.txtProductQuantity.setText("Kogus: " +productQuantity);
                 cartViewHolder.txtProductPrice.setText("Hind: " +productForCart.getPrice().toString() + "€");
-                total.setText("Kokku: " + totalPrice.toString());
+                total.setText("Kokku: " + df.format(totalPrice));
                 cartViewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         cartListRef.child("User View").child(userId).child("Products").child(productForCart.getProductId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
+
                                 if(task.isSuccessful()){
                                     DecimalFormat df = new DecimalFormat("#.##");
+                                    String productPrice = df.format(productForCart.getPrice() * productForCart.getQuantity());
+                                    oneItemTotalPrice = Double.valueOf(productPrice);
                                     totalPrice = totalPrice - oneItemTotalPrice;
                                     df.format(totalPrice);
-                                    total.setText("Kokku: " + totalPrice.toString());
+                                    total.setText("Kokku: " + df.format(totalPrice));
                                     Toast.makeText(getContext(), "Item removed successfully", Toast.LENGTH_LONG).show();
                                 }
                             }
