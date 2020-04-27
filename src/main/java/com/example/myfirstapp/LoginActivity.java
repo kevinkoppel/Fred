@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ProgressBar progressBar;
     EditText editTextEmail, editTextPassword;
     private FirebaseAuth mAuth;
+    TextView goToRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +32,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        goToRegistration = findViewById(R.id.go_to_signup);
+
+
 
         mAuth = FirebaseAuth.getInstance();
 
         findViewById(R.id.loginButton).setOnClickListener(this);
-        findViewById(R.id.BackButton).setOnClickListener(this);
+        findViewById(R.id.go_to_signup).setOnClickListener(this);
     }
     @Override
     public void onClick(View view) {
@@ -74,10 +79,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
 
-            case R.id.BackButton:
+            case R.id.go_to_signup:
                 finish();
                 startActivity(new Intent(this, SignUpActivity.class));
                 break;
+
+
+
         }
     }
 }

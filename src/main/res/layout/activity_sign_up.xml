@@ -9,25 +9,27 @@
 
 
     <RelativeLayout
+        android:id="@+id/grav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:background="@color/common_google_signin_btn_text_dark_default"
         android:gravity="center"
         android:text="Fred"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#2461DB"
         android:textSize="60sp"
-        app:fontFamily="@font/actor"
-        android:background="@color/common_google_signin_btn_text_dark_default">
+        app:fontFamily="@font/actor">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="151dp"
             android:orientation="vertical"
             android:paddingLeft="15dp"
-            android:paddingTop="100dp"
+            android:paddingTop="50dp"
             android:paddingRight="15dp">
 
             <EditText
@@ -96,14 +98,9 @@
             android:id="@+id/textView"
             android:layout_width="133dp"
             android:layout_height="71dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="147dp"
-            android:layout_marginTop="142dp"
-            android:layout_marginEnd="131dp"
-            android:layout_marginBottom="518dp"
+            android:layout_above="@+id/linearLayout"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
             android:fontFamily="@font/actor"
             android:gravity="center"
             android:text="Fred"

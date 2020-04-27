@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,11 +41,13 @@ public class ProductFragment extends Fragment {
     private ProductFragmentListener listener;
 
     TextView price, product, quantity;
-    Button plus, minus, addToCart;
+    Button plus, minus;
     Product productFromDatabase;
     int quantityBox = 1;
     String nr, pr;
     ProductForCart cartProduct;
+
+    ImageButton addToCart;
 
     private FirebaseAuth mAuth;
     public FirebaseFirestore fStore;

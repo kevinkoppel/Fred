@@ -32,8 +32,12 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DecimalFormat;
 
@@ -43,13 +47,20 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
     Double latitude, longitude;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    protected LocationManager locationManager;
+
+    private FirebaseAuth mAuth;
+    public FirebaseFirestore fStore;
+    String UserId, paymentMethodId;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
+
+        fStore = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         getLocation();
 
@@ -58,6 +69,28 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
+
+
+        //saab kätte kasutaja paymentId(et valideerida selle olemasolek järgmisse vaatesse minekuks)
+        UserId = mAuth.getCurrentUser().getUid();
+        Log.e("document", UserId );
+        DocumentReference docRef = fStore.collection("users").document(UserId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()){
+                        Log.e("document", "DocumentSnapshot data: " + document.getData());
+                        paymentMethodId = document.getString("paymentMethodId");
+                    }else{
+                        Log.e("document", "No such document");
+                    }
+                }else {
+                    Log.e("document", "get failed with", task.getException());
+                }
+            }
+        });
 
 
         final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Stores");
@@ -113,8 +146,13 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                 storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
-                        startActivity(startIntent);
+                        if(paymentMethodId == ""){
+                            Toast.makeText(getApplicationContext(), "Lisa maksekaart, et alustada ostlemise", Toast.LENGTH_SHORT);
+                        }else{
+                            Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
+                            startActivity(startIntent);
+                        }
+
                     }
                 });
 

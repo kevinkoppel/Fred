@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         greeting = findViewById(R.id.textView3);
 
 
+
+
         Button secondActivityBtn = findViewById(R.id.secondActivityBtn);
         ImageButton profileBtn = findViewById(R.id.profileButton);
         secondActivityBtn.setOnClickListener(new View.OnClickListener() {
@@ -56,25 +58,28 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        UserId = mAuth.getCurrentUser().getUid();
-        DocumentReference docRef = fStore.collection("users").document(UserId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    if(document.exists()){
-                        Log.e("document", "DocumentSnapshot data: " + document.getData());
-                        greeting.setText("Tere " + document.getString("Name") + "!");
+        if (mAuth.getCurrentUser() != null) {
+            UserId = mAuth.getCurrentUser().getUid();
+            DocumentReference docRef = fStore.collection("users").document(UserId);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot document = task.getResult();
+                        if(document.exists()){
+                            Log.e("document", "DocumentSnapshot data: " + document.getData());
+                            greeting.setText("Tere " + document.getString("Name") + "!");
 
-                    }else{
-                        Log.e("document", "No such document");
+                        }else{
+                            Log.e("document", "No such document");
+                        }
+                    }else {
+                        Log.e("document", "get failed with", task.getException());
                     }
-                }else {
-                    Log.e("document", "get failed with", task.getException());
                 }
-            }
-        });
+            });
+        }
+
 
 
     }
