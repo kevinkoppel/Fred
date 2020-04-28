@@ -63,7 +63,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="scalingPercent" value="110" />
+                                                <entry key="scalingPercent" value="84" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -76,7 +76,8 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="C:\Users\kevin\Downloads\tick.png" />
+                                      <entry key="foregroundImage" value="C:\Users\kevin\Downloads\fcaa12d9-392a-4c1f-89e5-9078ca5da6a1_200x200.png" />
+                                      <entry key="foregroundLayerName" value="ic_logo_foreground" />
                                       <entry key="outputName" value="ic_tick" />
                                     </map>
                                   </option>
