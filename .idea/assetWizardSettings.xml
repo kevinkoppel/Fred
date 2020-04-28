@@ -76,8 +76,8 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="C:\Users\kevin\Downloads\shopping-basket.png" />
-                                      <entry key="outputName" value="ic_add_tobasket2" />
+                                      <entry key="foregroundImage" value="C:\Users\kevin\Downloads\tick.png" />
+                                      <entry key="outputName" value="ic_tick" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -133,6 +133,11 @@
                 </map>
               </option>
             </PersistentState>
+          </value>
+        </entry>
+        <entry key="vectorWizard">
+          <value>
+            <PersistentState />
           </value>
         </entry>
       </map>
