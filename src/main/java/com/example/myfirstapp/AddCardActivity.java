@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -191,16 +190,17 @@ public class AddCardActivity extends AppCompatActivity {
                             deSerializeProduct(json);
                             addPaymentMethodToUsed(paymentMethod);
 
-                            builder.setMessage(json);
+                          /*  builder.setMessage(json);
                             builder.setPositiveButton("Restart demo", (DialogInterface dialog, int index) -> {
                                 CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
                                 cardInputWidget.clear();
-                                EditText emailInput = findViewById(R.id.emailInput);
-                                emailInput.setText(null);
+                            //    EditText emailInput = findViewById(R.id.emailInput);
+                            //    emailInput.setText(null);
                                 loadPage();
                             });
                             AlertDialog dialog = builder.create();
-                            dialog.show();
+                            dialog.show();*/
+                          finish();
                         }
                     });
 
@@ -215,8 +215,8 @@ public class AddCardActivity extends AppCompatActivity {
                             builder.setPositiveButton("Ok", (DialogInterface dialog, int index) -> {
                                 CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
                                 cardInputWidget.clear();
-                                EditText emailInput = findViewById(R.id.emailInput);
-                                emailInput.setText(null);
+                             //   EditText emailInput = findViewById(R.id.emailInput);
+                              //  emailInput.setText(null);
                             });
                             AlertDialog dialog = builder.create();
                             dialog.show();

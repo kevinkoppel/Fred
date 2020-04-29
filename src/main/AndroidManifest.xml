@@ -26,6 +26,7 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".AddCardActivity"/>
+        <activity android:name=".PaymentCompletedActivity"/>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">

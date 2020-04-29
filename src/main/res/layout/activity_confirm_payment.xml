@@ -7,10 +7,11 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ConfirmPaymentActivity"
     >
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartList2"
-        android:layout_width="397dp"
-        android:layout_height="190dp"
+        android:layout_width="380dp"
+        android:layout_height="182dp"
 
         android:layout_below="@+id/pealkiri"
 
@@ -18,20 +19,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.102"></androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintVertical_bias="0.275"></androidx.recyclerview.widget.RecyclerView>
+
+
 
     <Button
-        android:id="@+id/button3"
-        android:layout_width="109dp"
-        android:layout_height="37dp"
-        android:text="tagasi"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/maksa"
+        android:id="@+id/maksa2"
         android:layout_width="190dp"
         android:layout_height="50dp"
         android:text="Maksa"
@@ -40,6 +33,47 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.632"
-         />
+        app:layout_constraintVertical_bias="0.64"
+        android:background="@drawable/mybutton"
+    />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="95dp"
+        android:layout_height="28dp"
+        android:layout_marginBottom="16dp"
+        android:text="Ostukorv"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/cartList2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="147dp"
+        android:layout_height="28dp"
+        android:text="Kokku:"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/maksa2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cartList2" />
+
+    <Button
+        android:id="@+id/BackButton5"
+        android:layout_width="66dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_action_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

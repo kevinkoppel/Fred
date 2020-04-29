@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,8 +28,9 @@ public class ProfileActivity extends AppCompatActivity {
     String UserId;
     private static final String backendUrl = "http://10.0.2.2:4242/";
     private OkHttpClient httpClient = new OkHttpClient();
-    private String setupIntentClientSecret;
+    private String setupIntentClientSecret, paymentMethod, customerId;
     private Stripe stripe;
+
 
 
     @Override
@@ -50,6 +52,30 @@ public class ProfileActivity extends AppCompatActivity {
         Button addCardBtn = findViewById(R.id.addCard);
         Button backButton = findViewById(R.id.BackButton2);
 
+        UserId = mAuth.getCurrentUser().getUid();
+        Log.e("document", UserId );
+        DocumentReference docRef = fStore.collection("users").document(UserId);
+
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot == null) {
+                            Log.d("document", "onSuccess: LIST EMPTY");
+                            return;
+                        } else {
+                            nimi.setText(documentSnapshot.getString("Name"));
+                            emailText.setText(documentSnapshot.getString("Email"));
+                            paymentMethod = documentSnapshot.getString("paymentMethodId");
+                            customerId = documentSnapshot.getString("customerId");
+                            Log.d("document", "onSuccess: " + documentSnapshot.getString("Name"));
+                        }
+
+                    }
+                });
+        nimi.setFocusable(false);
+        emailText.setFocusable(false);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,8 +96,15 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent startIntent = new Intent(getApplicationContext(),AddCardActivity.class);
-                startActivity(startIntent);
+                if(paymentMethod == "" && customerId == ""){
+                    Intent startIntent = new Intent(getApplicationContext(),AddCardActivity.class);
+                    startActivity(startIntent);
+                }else{
+                    Toast.makeText(getApplicationContext(), "You already have added a card to your account", Toast.LENGTH_SHORT);
+                }
+
+
+
 
 
 
@@ -80,48 +113,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
-        UserId = mAuth.getCurrentUser().getUid();
-        Log.e("document", UserId );
-        DocumentReference docRef = fStore.collection("users").document(UserId);
-      /*  docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    if(document.exists()){
-                        Log.e("document", "DocumentSnapshot data: " + document.getData());
-                        nimi.setText(document.getString("Name"));
-                        emailText.setText(document.getString("Email"));
-                    }else{
-                        Log.e("document", "No such document");
-                    }
-                }else {
-                    Log.e("document", "get failed with", task.getException());
-                }
-            }
-        });*/
-      docRef.get()
-              .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-          @Override
-          public void onSuccess(DocumentSnapshot documentSnapshot) {
-              if (documentSnapshot == null) {
-                  Log.d("document", "onSuccess: LIST EMPTY");
-                  return;
-              } else {
-                  nimi.setText(documentSnapshot.getString("Name"));
-                  emailText.setText(documentSnapshot.getString("Email"));
-                  Log.d("document", "onSuccess: " + documentSnapshot.getString("Name"));
-              }
-
-          }
-      });
 
 
 
 
 
-        nimi.setFocusable(false);
-        emailText.setFocusable(false);
+
+
 
 
 

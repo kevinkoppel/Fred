@@ -9,36 +9,27 @@
 
     tools:context=".AddCardActivity">
 
-    <EditText
-        android:id="@+id/emailInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:layout_constraintTop_toTopOf="parent" android:layout_margin="20dp"
-        android:hint="Enter your email" />
-
     <com.stripe.android.view.CardInputWidget
         android:id="@+id/cardInputWidget"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/emailInput"
-        app:layout_constraintStart_toStartOf="@+id/emailInput"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.319"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
-        android:text="Save"
+        android:id="@+id/payButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/payButton"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="60dp"
         android:layout_marginRight="20dp"
         android:backgroundTint="@android:color/holo_blue_light"
-        app:layout_constraintTop_toBottomOf="@+id/cardInputWidget"
+        android:text="Lisa kaart"
+        app:layout_constraintEnd_toEndOf="@+id/cardInputWidget"
         app:layout_constraintStart_toStartOf="@+id/cardInputWidget"
-        app:layout_constraintEnd_toEndOf="@+id/cardInputWidget"/>
+        app:layout_constraintTop_toBottomOf="@+id/cardInputWidget" />
 
     <!--
     Collect permission to reuse the customer's card:
@@ -46,16 +37,5 @@
       and reference the terms of the payment in the checkout flow
     See https://stripe.com/docs/strong-customer-authentication/faqs#mandates
     -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="I authorise Stripe Samples to send instructions to the financial institution that issued my card to take payments from my card account in accordance with the terms of my agreement with you."
-
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/payButton"
-        app:layout_constraintStart_toStartOf="@+id/payButton"
-        app:layout_constraintEnd_toEndOf="@+id/payButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

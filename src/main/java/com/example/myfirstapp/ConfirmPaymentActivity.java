@@ -1,6 +1,5 @@
 package com.example.myfirstapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +33,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.Stripe;
 
 import java.io.IOException;
@@ -61,7 +59,10 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
     public String paymentMethod;
     public String customerId;
 
-    public double totalPriceDouble;
+    public double totalPriceDouble = 0.0;
+    private Double oneItemTotalPrice = 0.0;
+
+    public String totalPriceString;
 
 
     @Override
@@ -71,9 +72,19 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         Intent recieveIntent = this.getIntent();
         totalPriceDouble = recieveIntent.getDoubleExtra("total", 15.0);
 
+        totalPriceString = String.valueOf(totalPriceDouble);
+
+        TextView totalText = findViewById(R.id.textView10);
+
+        totalText.setText("Kokku: " + totalPriceString);
 
 
-        Button backButton = findViewById(R.id.button3);
+
+
+
+
+        Button backButton = findViewById(R.id.BackButton5);
+        Button payButton = findViewById(R.id.maksa2);
 
         recyclerView = findViewById(R.id.cartList2);
         recyclerView.setHasFixedSize(true);
@@ -84,44 +95,52 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         userId = mAuth.getCurrentUser().getUid();
 
+        payButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userId = mAuth.getCurrentUser().getUid();
+                Log.e("document", userId );
+                DocumentReference docRef = fStore.collection("users").document(userId);
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            if(document.exists()){
+                                Log.e("document", "DocumentSnapshot data: " + document.getData());
+                                paymentMethod = document.getString("paymentMethodId");
+                                customerId = document.getString("customerId");
+                                pay(paymentMethod, customerId, totalPriceDouble);
+                                final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List").child("User View").child(userId);
+                                cartListRef.removeValue();
+
+                            }else{
+                                Log.e("document", "No such document");
+                            }
+                        }else {
+                            Log.e("document", "get failed with", task.getException());
+                        }
+                    }
+                });
+            }
+        });
+
+
 
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List").child("User View").child(userId);
-                cartListRef.removeValue();
 
 
-
-                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(startIntent);
+                Intent intent = new Intent(getApplicationContext(), BarCodeActivity.class);
+                startActivity(intent);
             }
         });
 
 
         //get paymentMethodId and customerId
-        userId = mAuth.getCurrentUser().getUid();
-        Log.e("document", userId );
-        DocumentReference docRef = fStore.collection("users").document(userId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    if(document.exists()){
-                        Log.e("document", "DocumentSnapshot data: " + document.getData());
-                        paymentMethod = document.getString("paymentMethodId");
-                        customerId = document.getString("customerId");
-                        pay(paymentMethod, customerId, totalPriceDouble);
-                    }else{
-                        Log.e("document", "No such document");
-                    }
-                }else {
-                    Log.e("document", "get failed with", task.getException());
-                }
-            }
-        });
+
 
 
         final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List");
@@ -138,8 +157,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                 String productQuantity = productForCart.getQuantity().toString();
 
                 String productPrice = df.format(productForCart.getPrice() * productForCart.getQuantity());
-              /*  oneItemTotalPrice = Double.valueOf(productPrice);
-                totalPrice = totalPrice + oneItemTotalPrice;*/
+                oneItemTotalPrice = Double.valueOf(productPrice);
+                totalPrice = totalPrice + oneItemTotalPrice;
 
                 cartViewHolder.txtProductName.setText(productName);
                 cartViewHolder.txtProductQuantity.setText("Kogus: " +productQuantity);
@@ -152,10 +171,12 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
-                                  /*  DecimalFormat df = new DecimalFormat("#.##");
-                                    totalPrice = totalPrice - oneItemTotalPrice;
-                                    df.format(totalPrice);
-                                    total.setText("Kokku: " + totalPrice.toString());*/
+                                    DecimalFormat df = new DecimalFormat("#.##");
+                                    String productPrice = df.format(productForCart.getPrice() * productForCart.getQuantity());
+                                    oneItemTotalPrice = Double.valueOf(productPrice);
+                                    totalPriceDouble = totalPriceDouble - oneItemTotalPrice;
+
+                                    totalText.setText("Kokku: " + df.format(totalPriceDouble));
                                     Toast.makeText(getApplicationContext(), "Item removed successfully", Toast.LENGTH_LONG).show();
                                 }
                             }
@@ -180,7 +201,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
     }
 
     private void pay(String paymentMethodString, String customerIdString, double totalPrice) {
-        Button payButton = findViewById(R.id.maksa);
+
 
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         String json = "{"
@@ -204,7 +225,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
 
 // Todo: makse postmanist toimib, nyyd tuleb siit ka toimima saada
-        payButton.setOnClickListener((View view) -> {
+     /*   payButton.setOnClickListener((View view) -> {
            // PaymentMethodCreateParams params = new PaymentMethodCreateParams.Card.Builder().setNumber("4242424242424242").setCvc()
             final Context context = getApplicationContext();
             stripe = new Stripe(
@@ -215,7 +236,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
 
 
-        });
+        });*/
 
 
 
@@ -239,6 +260,9 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                 getApplicationContext(),
                 Objects.requireNonNull(stripePublishableKey)
         );
+
+        Intent startIntent = new Intent(getApplicationContext(),PaymentCompletedActivity.class);
+        startActivity(startIntent);
     }
     private static final class PayCallback implements Callback {
         @NonNull private final WeakReference<ConfirmPaymentActivity> activityRef;
