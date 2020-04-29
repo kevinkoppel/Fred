@@ -1,6 +1,7 @@
 package com.example.myfirstapp;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ public class StoreViewHolder extends RecyclerView.ViewHolder implements View.OnC
     public TextView storeName, distanceToStore;
     private ItemClickListener itemClickListener;
     View mView = itemView;
+    Button button = itemView.findViewById(R.id.button3);
 
     public StoreViewHolder(@NonNull View itemView) {
         super(itemView);

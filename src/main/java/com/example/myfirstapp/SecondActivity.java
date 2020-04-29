@@ -2,6 +2,7 @@ package com.example.myfirstapp;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -52,6 +53,11 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
     public FirebaseFirestore fStore;
     String UserId, paymentMethodId;
 
+    protected LocationManager locationManager;
+
+    private long LOCATION_REFRESHTIME = 1;
+    private long LOCATION_REFRESH_DISTANCE = 1;
+
 
 
     @Override
@@ -62,13 +68,18 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
         fStore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        getLocation();
+       // getLocation();
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        getLastLocation();
 
 
         recyclerView = findViewById(R.id.storeList);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
+
 
 
         //saab kätte kasutaja paymentId(et valideerida selle olemasolek järgmisse vaatesse minekuks)
@@ -92,14 +103,14 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
             }
         });
 
-
+        //Saab poed andmebaasist kätte
         final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Stores");
         FirebaseRecyclerOptions<Store> options =
                 new FirebaseRecyclerOptions.Builder<Store>()
                         .setQuery(cartListRef
                                 , Store.class).build();
 
-
+       // Koostab tabeli poodidest
         FirebaseRecyclerAdapter<Store, StoreViewHolder> adapter = new FirebaseRecyclerAdapter<Store, StoreViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull StoreViewHolder storeViewHolder, int i, @NonNull final Store store) {
@@ -112,15 +123,7 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                 double userLongitude = longitude;
 
 
-               /* double theta = userLongitude - storeLongitude;
-
-                double dist = Math.sin(Math.toRadians(userLatitude)) * Math.sin(Math.toRadians(storeLatitude)) + Math.cos(Math.toRadians(userLatitude)) * Math.cos(Math.toRadians(storeLatitude)) * Math.cos(Math.toRadians(theta));
-                dist = Math.acos(dist);
-                dist = Math.toDegrees(dist);
-                dist = dist * 60 * 1.1515;
-                dist = dist * 0.8684;
-                distanceString = df.format(dist);*/
-
+                // poe distantsi arvutus
                double radius = 6471000.0;
                double phiOne = userLatitude * Math.PI/180;
                double phiTwo = storeLatitude * Math.PI/180;
@@ -139,22 +142,54 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                }
 
 
+               storeViewHolder.button.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       String storeName = store.getStoreName();
+                       String laagriSelver = "Laagri Selver";
+                       String hiiuRimi = "Hiiu Rimi";
+                       if(paymentMethodId == ""){
+                           Toast.makeText(getApplicationContext(), "Lisa maksekaart, et alustada ostlemist", Toast.LENGTH_SHORT);
+                       }else{
+                           Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
+                           if(storeName.equals(laagriSelver)){
+                               startIntent.putExtra("store", "Laagri Selver");
+                               startActivity(startIntent);
+                           }if (storeName.equals(hiiuRimi)){
+                               startIntent.putExtra("store", "Hiiu Rimi");
+                               startActivity(startIntent);
+
+                           }
+                           // startActivity(startIntent);
+                       }
+                   }
+               });
 
 
 
 
-                storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+
+               // kontrollib et maksekaart oleks lisatud ja alustab järgmist activityt
+              /*  storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(paymentMethodId == ""){
-                            Toast.makeText(getApplicationContext(), "Lisa maksekaart, et alustada ostlemise", Toast.LENGTH_SHORT);
+                            Toast.makeText(getApplicationContext(), "Lisa maksekaart, et alustada ostlemist", Toast.LENGTH_SHORT);
                         }else{
                             Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
-                            startActivity(startIntent);
+                            if(store.getStoreName() == "Laagri Selver"){
+                                startIntent.putExtra("store", "Laagri Selver");
+                                startActivity(startIntent);
+                            }if (store.getStoreName() == "Hiiu Rimi"){
+                                startIntent.putExtra("store", "Hiiu Rimi");
+                                startActivity(startIntent);
+
+                            }
+                           // startActivity(startIntent);
                         }
 
                     }
-                });
+                });*/
 
 
                 Log.e("store", distanceString);
@@ -184,42 +219,10 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
 
     }
 
-    public Location getLocation() {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        Location lastKnownLocationGPS;
-        if (locationManager != null) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                lastKnownLocationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (lastKnownLocationGPS != null) {
-                    latitude= lastKnownLocationGPS.getLatitude();
-                    longitude = lastKnownLocationGPS.getLongitude();
-                    return lastKnownLocationGPS;
-                } else {
-                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        latitude = loc.getLatitude();
-                        longitude = loc.getLongitude();
-                        return loc;
-
-                    }else{
-                        Log.e("error", "siin2");
-                    }
-
-                }
-            }else {
-                requestPermissions();
-                Log.e("error", "siin");
-            }
-
-        } else {
-            return null;
-        }
-        Log.e("error", "siin3");
-        return null;
-    }
 
 
+
+    //kontrollib et kasutajal oleks asukoha näitamine lubatud
     private boolean checkPermissions(){
         if (
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
@@ -227,6 +230,7 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
         }
         return false;
     }
+    // küsib luba kasutaja asukoha näitamiseks
     private void requestPermissions(){
         ActivityCompat.requestPermissions(
                 this,
@@ -240,24 +244,22 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                 LocationManager.NETWORK_PROVIDER
         );
     }
+
+    //saab kasutaja asukoha
+    @SuppressLint("MissingPermission")
     private void getLastLocation(){
+
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-
-                fusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        Location location = task.getResult();
-                        if (location == null) {
-                            requestNewLocationData();
-                        } else {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                        }
+                fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+                    Location location = task.getResult();
+                    if (location == null) {
+                        requestNewLocationData();
+                    } else {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
                     }
-
                 });
-
 
             } else {
                 Toast.makeText(this, "Turn on location", Toast.LENGTH_LONG).show();
@@ -284,14 +286,19 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                 Looper.myLooper()
         );
 
+
     }
     private LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
 
         }
     };
+
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -312,5 +319,45 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+    // saab kasutaja asukoha (seda meetodit hetkel ei kasuta kuna vale asukoha andis
+    public Location getLocation() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        Location lastKnownLocationGPS;
+        if (locationManager != null) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                lastKnownLocationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (lastKnownLocationGPS != null) {
+                    /*latitude= lastKnownLocationGPS.getLatitude();
+                    longitude = lastKnownLocationGPS.getLongitude();
+                    return lastKnownLocationGPS;*/
+                    Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    latitude = loc.getLatitude();
+                    longitude = loc.getLongitude();
+                    return loc;
+
+                } else {
+                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        latitude = loc.getLatitude();
+                        longitude = loc.getLongitude();
+                        return loc;
+
+                    }else{
+                        Log.e("error", "siin2");
+                    }
+
+                }
+            }else {
+                requestPermissions();
+                Log.e("error", "siin");
+            }
+
+        } else {
+            return null;
+        }
+        Log.e("error", "siin3");
+        return null;
     }
 }

@@ -53,6 +53,7 @@ public class ProductFragment extends Fragment {
     public FirebaseFirestore fStore;
     String userId;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 
@@ -143,10 +144,10 @@ public class ProductFragment extends Fragment {
 
     }
 
-    public void updateEditText(String resultt){
+    public void updateEditText(String resultt, String storeName){
 
 
-        RetrieveFeedTask rf = new RetrieveFeedTask(resultt);
+        RetrieveFeedTask rf = new RetrieveFeedTask(resultt, storeName);
         String setQuantityToOne = "1";
         quantityBox = 1;
 
@@ -181,11 +182,17 @@ public class ProductFragment extends Fragment {
     }
     public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
 
+
+        String store;
         Product productFromDatabase;
         String resultString = null;
+        String hiiuStore = "Hiiu Rimi";
+        String laagriStore = "Laagri Selver";
 
-        public RetrieveFeedTask(String barcodeResult){
+
+        public RetrieveFeedTask(String barcodeResult, String storeName){
             resultString = barcodeResult;
+            store = storeName;
 
         }
 
@@ -197,29 +204,40 @@ public class ProductFragment extends Fragment {
             Log.e("ASyncTask", "doinbackground");
 
             try {
+                if(store.equals(hiiuStore)){
+                    StringBuilder sb = new StringBuilder("https://api.appery.io/rest/1/apiexpress/api/Rimi_tooted/Tooted/");
+                    sb.append(resultString);
+                    sb.append("?apiKey=365e3d7e-6f5b-458d-8be4-0e5e5d1260da");
+                    String fullUrlString = sb.toString();
 
-                StringBuilder sb = new StringBuilder("https://api.appery.io/rest/1/apiexpress/api/Rimi_tooted/Tooted/");
-                sb.append(resultString);
-                sb.append("?apiKey=365e3d7e-6f5b-458d-8be4-0e5e5d1260da");
-                String fullUrlString = sb.toString();
-                URL fullUrl = new URL(fullUrlString);
+
+                    URL fullUrl = new URL(fullUrlString);
 
 
-                HttpURLConnection urlConnection = (HttpURLConnection) fullUrl.openConnection();
-                try {
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String line;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line).append("\n");
+                    HttpURLConnection urlConnection = (HttpURLConnection) fullUrl.openConnection();
+                    try {
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                        StringBuilder stringBuilder = new StringBuilder();
+                        String line;
+                        while ((line = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(line).append("\n");
+                        }
+                        bufferedReader.close();
+
+                        return stringBuilder.toString();
                     }
-                    bufferedReader.close();
+                    finally{
+                        urlConnection.disconnect();
+                    }
+                }
+                if(store.equals(laagriStore)){
 
-                    return stringBuilder.toString();
                 }
-                finally{
-                    urlConnection.disconnect();
-                }
+                return "no store";
+
+
+               // StringBuilder sb = new StringBuilder("https://api.appery.io/rest/1/apiexpress/api/Rimi_tooted/Tooted/");
+
             }
             catch(Exception e) {
                 Log.e("ERROR", e.getMessage(), e);
