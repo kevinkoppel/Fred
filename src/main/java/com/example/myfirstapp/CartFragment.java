@@ -40,11 +40,11 @@ public class CartFragment extends Fragment   {
     private FirebaseAuth mAuth;
     public FirebaseFirestore fStore;
 
-    String userId;
+    public String userId, totalPriceString;
 
 
     private Double oneItemTotalPrice = 0.0;
-    private Double totalPrice = 0.0;
+    public Double totalPrice = 0.0;
 
 
     private String resultString = "algus";
@@ -78,6 +78,7 @@ public class CartFragment extends Fragment   {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getActivity(), ConfirmPaymentActivity.class);
+                startIntent.putExtra("total", totalPrice);
                 startActivity(startIntent);
             }
         });
@@ -116,7 +117,7 @@ public class CartFragment extends Fragment   {
                                     String productPrice = df.format(productForCart.getPrice() * productForCart.getQuantity());
                                     oneItemTotalPrice = Double.valueOf(productPrice);
                                     totalPrice = totalPrice - oneItemTotalPrice;
-                                    df.format(totalPrice);
+
                                     total.setText("Kokku: " + df.format(totalPrice));
                                     Toast.makeText(getContext(), "Item removed successfully", Toast.LENGTH_LONG).show();
                                 }

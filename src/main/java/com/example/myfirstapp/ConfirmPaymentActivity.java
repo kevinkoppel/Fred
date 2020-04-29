@@ -3,6 +3,7 @@ package com.example.myfirstapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.Callback;
@@ -42,6 +46,7 @@ import java.util.Objects;
 
 public class ConfirmPaymentActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private FirebaseFirestore fStore;
     String userId;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -53,12 +58,19 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
     private Double totalPrice = 0.0;
 
     private String paymentIntentClientSecret;
+    public String paymentMethod;
+    public String customerId;
+
+    public double totalPriceDouble;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_payment);
+        Intent recieveIntent = this.getIntent();
+        totalPriceDouble = recieveIntent.getDoubleExtra("total", 15.0);
+
 
 
         Button backButton = findViewById(R.id.button3);
@@ -69,11 +81,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         mAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
         userId = mAuth.getCurrentUser().getUid();
-
-        pay();
-
-
 
 
 
@@ -87,6 +96,30 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
                 Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(startIntent);
+            }
+        });
+
+
+        //get paymentMethodId and customerId
+        userId = mAuth.getCurrentUser().getUid();
+        Log.e("document", userId );
+        DocumentReference docRef = fStore.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()){
+                        Log.e("document", "DocumentSnapshot data: " + document.getData());
+                        paymentMethod = document.getString("paymentMethodId");
+                        customerId = document.getString("customerId");
+                        pay(paymentMethod, customerId, totalPriceDouble);
+                    }else{
+                        Log.e("document", "No such document");
+                    }
+                }else {
+                    Log.e("document", "get failed with", task.getException());
+                }
             }
         });
 
@@ -143,14 +176,17 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
+
     }
 
-    private void pay() {
+    private void pay(String paymentMethodString, String customerIdString, double totalPrice) {
         Button payButton = findViewById(R.id.maksa);
+
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         String json = "{"
-                + "\"customer\":\"cus_HAZsHpvedICeBV\""
-                + "\"paymentMethod\": \"pm_1GbuGDLxS1yX5fKfUmtrDvKv\""
+                + "\"customer\":\"" + customerIdString + "\","
+                + "\"paymentMethod\": \"" + paymentMethodString + "\","
+                + "\"amount\": " + totalPrice
                 + "}";
 
         RequestBody body = RequestBody.create(mediaType, json);
