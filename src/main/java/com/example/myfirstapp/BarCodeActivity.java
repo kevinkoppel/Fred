@@ -57,7 +57,7 @@ public String storeName;
     @Override
     public void onProductSent(ProductForCart resultProduct) {
         CartFragment frag = (CartFragment) getSupportFragmentManager().findFragmentById(R.id.cartContainer);
-        frag.updateEditText(resultProduct.getProduct());
+     //   frag.updateEditText(resultProduct.getProduct());
         getSupportFragmentManager().beginTransaction().show(cartFragment).hide(productFragment).commit();
     }
 

@@ -136,7 +136,7 @@ public class CartFragment extends Fragment   {
                 return holder;
             }
         };
-        // ToDo: total price arvutusloogika ülevaadata (eraldi meetod äkki teha selleks)
+
 
         recyclerView.setAdapter(adapter);
         adapter.startListening();
@@ -165,7 +165,7 @@ public class CartFragment extends Fragment   {
 
 
 
-        //empty.setText(resultString);
+
 
 
 

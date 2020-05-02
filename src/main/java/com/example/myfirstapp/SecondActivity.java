@@ -142,14 +142,14 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                }
 
 
-               storeViewHolder.button.setOnClickListener(new View.OnClickListener() {
+            /*   storeViewHolder.button.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
                        String storeName = store.getStoreName();
                        String laagriSelver = "Laagri Selver";
                        String hiiuRimi = "Hiiu Rimi";
                        if(paymentMethodId == ""){
-                           Toast.makeText(getApplicationContext(), "Lisa maksekaart, et alustada ostlemist", Toast.LENGTH_SHORT);
+                           Toast.makeText(getApplicationContext(), "Lisa maksekaart, et alustada ostlemist", Toast.LENGTH_LONG);
                        }else{
                            Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
                            if(storeName.equals(laagriSelver)){
@@ -163,7 +163,27 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                            // startActivity(startIntent);
                        }
                    }
-               });
+               });*/
+                storeViewHolder.button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String storeName = store.getStoreName();
+                        String laagriSelver = "Laagri Selver";
+                        String hiiuRimi = "Hiiu Rimi";
+
+                            Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
+                            if(storeName.equals(laagriSelver)){
+                                startIntent.putExtra("store", "Laagri Selver");
+                                startActivity(startIntent);
+                            }if (storeName.equals(hiiuRimi)){
+                                startIntent.putExtra("store", "Hiiu Rimi");
+                                startActivity(startIntent);
+
+                            }
+                            // startActivity(startIntent);
+
+                    }
+                });
 
 
 

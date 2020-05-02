@@ -49,7 +49,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private TextView total;
-    private static final String BACKEND_URL = "http://192.168.43.182:4567/";
+    private static final String BACKEND_URL = "https://saving-cards-without-payment.herokuapp.com/";
 
     private OkHttpClient httpClient = new OkHttpClient();
     private Stripe stripe;

@@ -1,6 +1,7 @@
 package com.example.myfirstapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +39,7 @@ public class ProductFragment extends Fragment {
     public interface ProductFragmentListener {
 
         void onProductSent(ProductForCart resultProduct);
+
     }
     private ProductFragmentListener listener;
 
@@ -137,6 +140,7 @@ public class ProductFragment extends Fragment {
                         if(task.isSuccessful()){
                             Log.e("addToCart", "added to cart");
                             Toast.makeText(getContext(), "Toode on lisatud ostukorvi", Toast.LENGTH_LONG);
+
 
                         }
                     }
@@ -256,17 +260,8 @@ public class ProductFragment extends Fragment {
 
 
 
-
-
-
-       /* Fragment currentFragment = cartFrag.getActivity().getSupportFragmentManager().findFragmentById(R.id.cartFragment);
-        FragmentTransaction fragmentTransaction = currentFragment.getFragmentManager().beginTransaction();
-        fragmentTransaction.detach(currentFragment);
-        fragmentTransaction.attach(currentFragment);
-        fragmentTransaction.commit();*/
-
             deSerializeProduct(response);
-            //  showReceivedData1.setText(response);
+
 
 
             Log.e("asynctask", response);
@@ -288,20 +283,43 @@ public class ProductFragment extends Fragment {
         stringBuilder.append(",\"productId\":\"" + idString + "\"}");
         String responseToDeSerialize = stringBuilder.toString();
 
+        if(responseToDeSerialize.contains("Barcode"))
+        {
+            ObjectMapper mapper = new ObjectMapper();
 
-        ObjectMapper mapper = new ObjectMapper();
+            try {
 
-        try {
+                productFromDatabase = mapper.readValue(responseToDeSerialize, Product.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //   Log.e("asynctask", productFromDatabase.getProduct());
 
-            productFromDatabase = mapper.readValue(responseToDeSerialize, Product.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+            product.setText(productFromDatabase.getProduct());
+            pr = String.valueOf(productFromDatabase.getPrice());
+            price.setText(pr);
+        }else{
+       //     Toast.makeText(getContext(), "Toodet ei ole andmebaasis", Toast.LENGTH_LONG);
+            product.setText("Toodet ei ole andmebaasis");
+            listener.onProductSent(cartProduct);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Toode puudub");
+            builder.setMessage("Antud toodet ei ole meie andmebaasis");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    product.setText("");
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+
         }
-        //   Log.e("asynctask", productFromDatabase.getProduct());
 
-        product.setText(productFromDatabase.getProduct());
-        pr = String.valueOf(productFromDatabase.getPrice());
-        price.setText(pr);
+
+
 
 
 

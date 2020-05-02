@@ -49,7 +49,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddCardActivity extends AppCompatActivity {
-    private static final String backendUrl = "http://192.168.43.182:4567/";
+    private static final String backendUrl = "https://saving-cards-without-payment.herokuapp.com/";
     private OkHttpClient httpClient = new OkHttpClient();
     private String setupIntentClientSecret;
     private Stripe stripe;

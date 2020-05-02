@@ -100,7 +100,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Intent startIntent = new Intent(getApplicationContext(),AddCardActivity.class);
                     startActivity(startIntent);
                 }else{
-                    Toast.makeText(getApplicationContext(), "You already have added a card to your account", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "You already have added a card to your account", Toast.LENGTH_LONG);
                 }
 
 
