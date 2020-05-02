@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -67,6 +68,10 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
 
         fStore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+
+        ImageButton profileButton = findViewById(R.id.profileButton2);
+
+
 
        // getLocation();
 
@@ -141,15 +146,24 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                    distanceString = df.format(dist) + "km";
                }
 
+               profileButton.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       Intent startIntent = new Intent(getApplicationContext(),ProfileActivity.class);
+                       startActivity(startIntent);
+                   }
+               });
 
-            /*   storeViewHolder.button.setOnClickListener(new View.OnClickListener() {
+
+               storeViewHolder.button.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
                        String storeName = store.getStoreName();
                        String laagriSelver = "Laagri Selver";
                        String hiiuRimi = "Hiiu Rimi";
                        if(paymentMethodId == ""){
-                           Toast.makeText(getApplicationContext(), "Lisa maksekaart, et alustada ostlemist", Toast.LENGTH_LONG);
+                           Toast.makeText(getApplication(), "Lisa krediitkaart, et jätkata", Toast.LENGTH_LONG).show();
+
                        }else{
                            Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
                            if(storeName.equals(laagriSelver)){
@@ -163,27 +177,8 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                            // startActivity(startIntent);
                        }
                    }
-               });*/
-                storeViewHolder.button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String storeName = store.getStoreName();
-                        String laagriSelver = "Laagri Selver";
-                        String hiiuRimi = "Hiiu Rimi";
+               });
 
-                            Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
-                            if(storeName.equals(laagriSelver)){
-                                startIntent.putExtra("store", "Laagri Selver");
-                                startActivity(startIntent);
-                            }if (storeName.equals(hiiuRimi)){
-                                startIntent.putExtra("store", "Hiiu Rimi");
-                                startActivity(startIntent);
-
-                            }
-                            // startActivity(startIntent);
-
-                    }
-                });
 
 
 
