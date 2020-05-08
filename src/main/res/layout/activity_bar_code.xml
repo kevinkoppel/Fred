@@ -10,16 +10,24 @@
     <FrameLayout
         android:id="@+id/barcodeContainer"
         android:layout_width="match_parent"
-        android:layout_height="243dp" />
+        android:layout_height="265dp" />
+
     <FrameLayout
         android:id="@+id/cartContainer"
         android:layout_width="match_parent"
-        android:layout_height="490dp" >
+        android:layout_height="505dp"
+        android:layout_marginTop="-25dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/rounded_shape">
 
         <FrameLayout
             android:id="@+id/productContainer"
             android:layout_width="match_parent"
-            android:layout_height="490dp" />
+            android:layout_height="505dp"
+            android:layout_marginTop="-25dp"
+
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/rounded_shape" />
     </FrameLayout>
 
 

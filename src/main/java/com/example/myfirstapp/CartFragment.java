@@ -77,9 +77,14 @@ public class CartFragment extends Fragment   {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getActivity(), ConfirmPaymentActivity.class);
-                startIntent.putExtra("total", totalPrice);
-                startActivity(startIntent);
+                if(totalPrice == 0){
+                    Toast.makeText(getContext(), "Ostukorv on tühi", Toast.LENGTH_LONG).show();
+                }else{
+                    Intent startIntent = new Intent(getActivity(), ConfirmPaymentActivity.class);
+                    startIntent.putExtra("total", totalPrice);
+                    startActivity(startIntent);
+                }
+
             }
         });
 
@@ -102,7 +107,7 @@ public class CartFragment extends Fragment   {
 
                 cartViewHolder.txtProductName.setText(productName);
                 cartViewHolder.txtProductQuantity.setText("Kogus: " +productQuantity);
-                cartViewHolder.txtProductPrice.setText("Hind: " +productForCart.getPrice().toString() + "€");
+                cartViewHolder.txtProductPrice.setText(productForCart.getPrice().toString() + "€");
                 total.setText("Kokku: " + df.format(totalPrice));
                 cartViewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override

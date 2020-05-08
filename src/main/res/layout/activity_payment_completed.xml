@@ -4,12 +4,24 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/tick"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        app:srcCompat="@mipmap/ic_tick_foreground" />
+    <TextView
+        android:id="@+id/Logo"
+        style="@style/Widget.AppCompat.TextView.SpinnerItem"
+        android:layout_width="155dp"
+        android:layout_height="87dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="70dp"
+        android:gravity="center"
+        android:text="Fred"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#2461DB"
+        android:textSize="60sp"
+        app:fontFamily="@font/actor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.554"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView6"
@@ -38,6 +50,7 @@
         android:id="@+id/button4"
         android:layout_width="193dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
 
         android:layout_marginTop="20dp"
 

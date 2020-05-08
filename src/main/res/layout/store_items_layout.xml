@@ -4,15 +4,14 @@
     android:layout_width="wrap_content"
     android:layout_height="70dp"
     android:layout_gravity="center_horizontal"
-    android:layout_margin="4dp"
-    android:layout_marginLeft="10dp"
-    android:background="@color/cardview_dark_background"
+    android:layout_margin="10dp"
+    android:background="@drawable/rounded_store_card"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="350dp"
+        android:layout_width="300dp"
         android:layout_height="70dp"
-        android:background="#A8021EBB"
+        android:background="@drawable/rounded_store_card"
         android:elevation="@dimen/fab_margin"
         android:fadingEdge="horizontal"
         android:gravity="center_horizontal"

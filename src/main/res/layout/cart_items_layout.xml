@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/darker_gray"
-        android:padding="0dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginRight="20dp"
+        android:background="#FFFFFF"
+        android:padding="0dp"
+        android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/cart_product_name"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="25dp"
             android:text="Product name"
             android:textAlignment="textStart"
-            android:textColor="@color/colorWhite"
-            android:textSize="14dp" />
+            android:textColor="#0C0D0E"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/cart_product_quantity"
@@ -33,7 +36,7 @@
             android:layout_marginRight="5dp"
             android:text="Product quantity"
             android:textAlignment="textEnd"
-            android:textColor="@color/colorWhite"
+            android:textColor="#0A0909"
             android:textSize="14dp" />
 
         <TextView
@@ -41,12 +44,12 @@
             android:layout_width="319dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/cart_product_name"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="2dp"
             android:text="Product price"
-            android:textColor="@color/colorWhite"
-            android:textSize="14dp"
+            android:textColor="#9A0A0909"
 
+            android:textSize="14dp"
             android:textStyle="bold" />
 
         <ImageView

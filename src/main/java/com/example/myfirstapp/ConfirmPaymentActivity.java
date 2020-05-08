@@ -98,30 +98,36 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userId = mAuth.getCurrentUser().getUid();
-                Log.e("document", userId );
-                DocumentReference docRef = fStore.collection("users").document(userId);
-                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
-                            DocumentSnapshot document = task.getResult();
-                            if(document.exists()){
-                                Log.e("document", "DocumentSnapshot data: " + document.getData());
-                                paymentMethod = document.getString("paymentMethodId");
-                                customerId = document.getString("customerId");
-                                pay(paymentMethod, customerId, totalPriceDouble);
-                                final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List").child("User View").child(userId);
-                                cartListRef.removeValue();
+                if(totalText.getText().toString() == "Kokku: 0"){
+                    Toast.makeText(ConfirmPaymentActivity.this, "Ostukorv on tühi", Toast.LENGTH_LONG).show();
+                }else {
+                    userId = mAuth.getCurrentUser().getUid();
+                    Log.e("document", userId );
+                    DocumentReference docRef = fStore.collection("users").document(userId);
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                DocumentSnapshot document = task.getResult();
+                                if(document.exists()){
+                                    Log.e("document", "DocumentSnapshot data: " + document.getData());
+                                    paymentMethod = document.getString("paymentMethodId");
+                                    customerId = document.getString("customerId");
+                                    pay(paymentMethod, customerId, totalPriceDouble);
+                                    final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List").child("User View").child(userId);
+                                    cartListRef.removeValue();
 
-                            }else{
-                                Log.e("document", "No such document");
+                                }else{
+                                    Log.e("document", "No such document");
+                                }
+                            }else {
+                                Log.e("document", "get failed with", task.getException());
                             }
-                        }else {
-                            Log.e("document", "get failed with", task.getException());
                         }
-                    }
-                });
+                    });
+                }
+
+
             }
         });
 
@@ -133,8 +139,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(getApplicationContext(), BarCodeActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
