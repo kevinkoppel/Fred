@@ -1,14 +1,18 @@
 package com.example.myfirstapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.budiyev.android.codescanner.CodeScanner;
@@ -59,6 +63,7 @@ public class BarcodeFragment extends Fragment  {
 
             }
         });
+        checkPermissions();
 
         scannerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,13 +94,27 @@ public class BarcodeFragment extends Fragment  {
             listener = (BarCodeFragmentListener) context;
         }else {
             throw new RuntimeException(context.toString()
-            + "mus implement barcodefragment listener");
+            + "must implement barcodefragment listener");
         }
     }
     @Override
     public void onDetach(){
         super.onDetach();
         listener = null;
+    }
+
+    private boolean checkPermissions(){
+        if (
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }
+        Toast.makeText(getContext(), "Permission denied to read your Camera", Toast.LENGTH_SHORT).show();
+        ActivityCompat.requestPermissions(
+                getActivity(),
+                new String[]{Manifest.permission.CAMERA},
+                1011
+        );
+        return false;
     }
 
 

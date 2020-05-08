@@ -183,30 +183,6 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
 
 
 
-
-               // kontrollib et maksekaart oleks lisatud ja alustab järgmist activityt
-              /*  storeViewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(paymentMethodId == ""){
-                            Toast.makeText(getApplicationContext(), "Lisa maksekaart, et alustada ostlemist", Toast.LENGTH_SHORT);
-                        }else{
-                            Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
-                            if(store.getStoreName() == "Laagri Selver"){
-                                startIntent.putExtra("store", "Laagri Selver");
-                                startActivity(startIntent);
-                            }if (store.getStoreName() == "Hiiu Rimi"){
-                                startIntent.putExtra("store", "Hiiu Rimi");
-                                startActivity(startIntent);
-
-                            }
-                           // startActivity(startIntent);
-                        }
-
-                    }
-                });*/
-
-
                 Log.e("store", distanceString);
                 Log.e("store", store.getStoreName());
 

@@ -209,9 +209,9 @@ public class ProductFragment extends Fragment {
 
             try {
                 if(store.equals(hiiuStore)){
-                    StringBuilder sb = new StringBuilder("https://api.appery.io/rest/1/apiexpress/api/Rimi_tooted/Tooted/");
+                    StringBuilder sb = new StringBuilder("https://api.appery.io/rest/1/apiexpress/api/Rimi_tooted/");
                     sb.append(resultString);
-                    sb.append("?apiKey=365e3d7e-6f5b-458d-8be4-0e5e5d1260da");
+                    sb.append("?apiKey=40e54857-50c4-4bdb-b6d7-0e7d46693022");
                     String fullUrlString = sb.toString();
 
 

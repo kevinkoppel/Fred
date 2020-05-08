@@ -1,6 +1,8 @@
 package com.example.myfirstapp;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         greeting = findViewById(R.id.textView3);
+
+        checkCameraPermissions();
+        checkLocationPermissions();
+
+
 
 
 
@@ -144,5 +152,43 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    private void requestLocationPermissions(){
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                44
+        );
+
+    }
+    private boolean checkLocationPermissions(){
+        if (
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }else{
+            requestLocationPermissions();
+        }
+
+        return false;
+    }
+    private boolean checkCameraPermissions(){
+        if (
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }else{
+            requestCameraPermissions();
+        }
+
+        return false;
+    }
+    private void requestCameraPermissions(){
+
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{Manifest.permission.CAMERA},
+                1011
+        );
+    }
+
+
 
 }
