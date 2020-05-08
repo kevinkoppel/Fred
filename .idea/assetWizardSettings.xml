@@ -63,7 +63,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="scalingPercent" value="84" />
+                                                <entry key="scalingPercent" value="66" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -76,9 +76,8 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="C:\Users\kevin\Downloads\fcaa12d9-392a-4c1f-89e5-9078ca5da6a1_200x200.png" />
-                                      <entry key="foregroundLayerName" value="ic_logo_foreground" />
-                                      <entry key="outputName" value="ic_tick" />
+                                      <entry key="foregroundImage" value="C:\Users\kevin\Desktop\Lõputöö\fcaa12d9-392a-4c1f-89e5-9078ca5da6a1_200x200 (1).png" />
+                                      <entry key="outputName" value="ic_launcher_logo" />
                                     </map>
                                   </option>
                                 </PersistentState>

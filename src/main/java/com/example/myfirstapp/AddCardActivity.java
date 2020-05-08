@@ -66,6 +66,14 @@ public class AddCardActivity extends AppCompatActivity {
 
         fStore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        Button backButton = findViewById(R.id.BackButton5);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         loadPage();
     }
@@ -190,17 +198,9 @@ public class AddCardActivity extends AppCompatActivity {
                             deSerializeProduct(json);
                             addPaymentMethodToUsed(paymentMethod);
 
-                          /*  builder.setMessage(json);
-                            builder.setPositiveButton("Restart demo", (DialogInterface dialog, int index) -> {
-                                CardInputWidget cardInputWidget = findViewById(R.id.cardInputWidget);
-                                cardInputWidget.clear();
-                            //    EditText emailInput = findViewById(R.id.emailInput);
-                            //    emailInput.setText(null);
-                                loadPage();
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();*/
-                          finish();
+
+                            Intent startIntent = new Intent(getApplicationContext(),ProfileActivity.class);
+                            startActivity(startIntent);
                         }
                     });
 

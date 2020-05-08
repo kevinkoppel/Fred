@@ -3,7 +3,9 @@ package com.example.myfirstapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -58,6 +60,8 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
 
     private long LOCATION_REFRESHTIME = 1;
     private long LOCATION_REFRESH_DISTANCE = 1;
+
+
 
 
 
@@ -162,7 +166,27 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                        String laagriSelver = "Laagri Selver";
                        String hiiuRimi = "Hiiu Rimi";
                        if(paymentMethodId == ""){
-                           Toast.makeText(getApplication(), "Lisa krediitkaart, et jätkata", Toast.LENGTH_LONG).show();
+
+                           AlertDialog.Builder builder = new AlertDialog.Builder(SecondActivity.this, R.style.MyAlertDialogStyle);
+                           builder.setTitle("Krediitkaart puudub");
+                           builder.setMessage("Lisa krediitkaart, et jätkata");
+                           builder.setPositiveButton("Lisa krediitkaart", new DialogInterface.OnClickListener() {
+                               @Override
+                               public void onClick(DialogInterface dialog, int which) {
+                                   Intent startIntent = new Intent(getApplicationContext(),AddCardActivity.class);
+                                   startActivity(startIntent);
+                                   dialog.cancel();
+                               }
+                           });
+                           builder.setNegativeButton("Tagasi", new DialogInterface.OnClickListener() {
+                               @Override
+                               public void onClick(DialogInterface dialog, int which) {
+                                   dialog.cancel();
+                               }
+                           });
+
+                           builder.show();
+
 
                        }else{
                            Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
@@ -174,13 +198,10 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                                startActivity(startIntent);
 
                            }
-                           // startActivity(startIntent);
+
                        }
                    }
                });
-
-
-
 
 
                 Log.e("store", distanceString);
@@ -188,8 +209,6 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
 
                 storeViewHolder.distanceToStore.setText(distanceString);
                 storeViewHolder.storeName.setText(store.getStoreName());
-
-
 
             }
 
@@ -210,9 +229,6 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
 
     }
 
-
-
-
     //kontrollib et kasutajal oleks asukoha näitamine lubatud
     private boolean checkPermissions(){
         if (
@@ -228,7 +244,37 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
                 PERMISSION_ID
         );
+
+
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
+                    Intent startIntent = new Intent(getApplicationContext(),SecondActivity.class);
+                    startActivity(startIntent);
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                    Intent startIntent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(startIntent);
+                }
+                return;
+
+            // other 'case' lines to check for other
+
+    }
+
     private boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
@@ -311,44 +357,5 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
     public void onProviderDisabled(String provider) {
 
     }
-    // saab kasutaja asukoha (seda meetodit hetkel ei kasuta kuna vale asukoha andis
-    public Location getLocation() {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        Location lastKnownLocationGPS;
-        if (locationManager != null) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                lastKnownLocationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (lastKnownLocationGPS != null) {
-                    /*latitude= lastKnownLocationGPS.getLatitude();
-                    longitude = lastKnownLocationGPS.getLongitude();
-                    return lastKnownLocationGPS;*/
-                    Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    latitude = loc.getLatitude();
-                    longitude = loc.getLongitude();
-                    return loc;
 
-                } else {
-                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        latitude = loc.getLatitude();
-                        longitude = loc.getLongitude();
-                        return loc;
-
-                    }else{
-                        Log.e("error", "siin2");
-                    }
-
-                }
-            }else {
-                requestPermissions();
-                Log.e("error", "siin");
-            }
-
-        } else {
-            return null;
-        }
-        Log.e("error", "siin3");
-        return null;
-    }
 }
