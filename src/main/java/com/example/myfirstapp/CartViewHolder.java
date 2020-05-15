@@ -2,7 +2,7 @@ package com.example.myfirstapp;
 
 
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,7 +13,8 @@ public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public TextView txtProductName, txtProductPrice, txtProductQuantity;
   //  private AdapterView.OnItemClickListener itemClickListener;
     private ItemClickListener itemClickListener;
-    ImageView deleteButton = itemView.findViewById(R.id.imageView);
+   // ImageView deleteButton = itemView.findViewById(R.id.imageView);
+    ImageButton deleteButton = itemView.findViewById(R.id.deleteButton2);
 
 
 

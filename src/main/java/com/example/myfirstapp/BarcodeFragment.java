@@ -22,7 +22,7 @@ import com.google.zxing.Result;
 
 public class BarcodeFragment extends Fragment  {
     private BarCodeFragmentListener listener;
-    private CodeScanner mCodeScanner;
+    public CodeScanner mCodeScanner;
     String barcodeResult;
    // RetrieveFeedTask aTask = new RetrieveFeedTask(barcodeResult);
     public interface BarCodeFragmentListener {
@@ -55,8 +55,12 @@ public class BarcodeFragment extends Fragment  {
                     //    aTask.execute();
 
 
+                       // mCodeScanner.stopPreview();
+
 
                         mCodeScanner.startPreview();
+
+
 
                     }
                 });

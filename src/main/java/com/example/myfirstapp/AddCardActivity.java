@@ -71,7 +71,8 @@ public class AddCardActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent startIntent = new Intent(getApplicationContext(),ProfileActivity.class);
+                startActivity(startIntent);
             }
         });
 
@@ -98,6 +99,7 @@ public class AddCardActivity extends AppCompatActivity {
                             Context applicationContext = getApplicationContext();
                             Toast.makeText(applicationContext, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
                         });
+                        Log.e("add card error", e.toString());
                     }
 
                     @Override
@@ -107,6 +109,8 @@ public class AddCardActivity extends AppCompatActivity {
                                 Context applicationContext = getApplicationContext();
                                 Toast.makeText(applicationContext, "Error: " + response.toString(), Toast.LENGTH_LONG).show();
                             });
+                            Log.e("add card error2", response.toString());
+
                         } else {
                             Gson gson = new Gson();
                             Type type = new TypeToken<Map<String, String>>(){}.getType();

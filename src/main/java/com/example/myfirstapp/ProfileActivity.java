@@ -1,17 +1,22 @@
 package com.example.myfirstapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -37,6 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Stripe stripe;
     CardView creditCard;
     Button addCardBtn;
+    ImageButton deleteCardBtn;
 
 
 
@@ -64,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
         addCardBtn = findViewById(R.id.addCard);
         Button backButton = findViewById(R.id.BackButton2);
         creditCard = findViewById(R.id.creditCardPreview);
+        deleteCardBtn = findViewById(R.id.imageButton2);
 
         creditCard.setVisibility(View.GONE);
 
@@ -98,7 +105,9 @@ public class ProfileActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
+                Intent startIntent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(startIntent);
             }
         });
 
@@ -129,6 +138,66 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
         getCreditCartPreview();
+        deleteCardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this, R.style.MyAlertDialogStyle);
+                builder.setTitle("Olete kindel?");
+                builder.setMessage("Kas olete kindel, et soovite kaardi eemaldada?");
+                builder.setPositiveButton("Jah", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        UserId = mAuth.getCurrentUser().getUid();
+
+
+
+                        fStore.collection("users")
+                                .document(UserId)
+                                .update("paymentMethodId", "")
+
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("payment", "payment method method removed");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("payment", "error writing document", e);
+                                    }
+                                });
+                        fStore.collection("users")
+                                .document(UserId)
+                                .update("customerId", "")
+
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("payment", "payment method removed");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("payment", "error writing document", e);
+                                    }
+                                });
+                        Intent startIntent = new Intent(getApplicationContext(),ProfileActivity.class);
+                        startActivity(startIntent);
+                    }
+                });
+                builder.setNegativeButton("Tagasi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
+            }
+        });
 
     }
     private void getCreditCartPreview(){

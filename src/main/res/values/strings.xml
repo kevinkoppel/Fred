@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Fred</string>
     <string name="activity_confirm_payment">ConfirmPaymentActivity</string>
+    <string name="delete_card">This is an <u>underline</u>.</string>
 </resources>

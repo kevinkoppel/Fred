@@ -168,9 +168,9 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                        if(paymentMethodId == ""){
 
                            AlertDialog.Builder builder = new AlertDialog.Builder(SecondActivity.this, R.style.MyAlertDialogStyle);
-                           builder.setTitle("Krediitkaart puudub");
-                           builder.setMessage("Lisa krediitkaart, et jätkata");
-                           builder.setPositiveButton("Lisa krediitkaart", new DialogInterface.OnClickListener() {
+                           builder.setTitle("Maksekaart puudub");
+                           builder.setMessage("Lisa maksekaart, et jätkata");
+                           builder.setPositiveButton("Lisa maksekaart", new DialogInterface.OnClickListener() {
                                @Override
                                public void onClick(DialogInterface dialog, int which) {
                                    Intent startIntent = new Intent(getApplicationContext(),AddCardActivity.class);

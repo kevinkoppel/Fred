@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class ProductFragment extends Fragment {
     int quantityBox = 1;
     String nr, pr;
     ProductForCart cartProduct;
+    public ProgressBar progressBar;
 
     ImageButton addToCart;
 
@@ -74,6 +76,8 @@ public class ProductFragment extends Fragment {
         plus = view.findViewById(R.id.increase);
         minus = view.findViewById(R.id.decrease);
         addToCart = view.findViewById(R.id.addToCart);
+        progressBar = view.findViewById(R.id.progressBar2);
+        progressBar.setVisibility(View.GONE);
 
 
         nr = String.valueOf(quantityBox);
@@ -166,7 +170,7 @@ public class ProductFragment extends Fragment {
             quantity.setText(nr);
             double priceWithQuantity = productFromDatabase.getPrice() * quantityBox;
             pr = String.valueOf(priceWithQuantity);
-            price.setText(pr);
+            price.setText(pr + "€");
         }else{
             return;
         }
@@ -178,13 +182,23 @@ public class ProductFragment extends Fragment {
             quantity.setText(nr);
             double priceWithQuantity = productFromDatabase.getPrice() * quantityBox;
             pr = String.valueOf(priceWithQuantity);
-            price.setText(pr);
+            price.setText(pr + "€");
         }else{
             return;
         }
 
     }
     public class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
+
+        ProgressBar pr = getView().findViewById(R.id.progressBar2);
+        TextView price = (TextView) getView().findViewById(R.id.hindTextView);
+        TextView product = getView().findViewById(R.id.toodeTextView);
+        TextView quantity = getView().findViewById(R.id.integer_number);
+        Button plus = getView().findViewById(R.id.increase);
+        Button minus = getView().findViewById(R.id.decrease);
+        ImageButton addToCart = getView().findViewById(R.id.addToCart);
+
+
 
 
         String store;
@@ -201,6 +215,16 @@ public class ProductFragment extends Fragment {
         }
 
         protected void onPreExecute() {
+            pr.setVisibility(View.VISIBLE);
+            price.setVisibility(View.GONE);
+            product.setVisibility(View.GONE);
+            quantity.setVisibility(View.GONE);
+            plus.setVisibility(View.GONE);
+            minus.setVisibility(View.GONE);
+            addToCart.setVisibility(View.GONE);
+
+
+
 
         }
 
@@ -240,7 +264,7 @@ public class ProductFragment extends Fragment {
                 return "no store";
 
 
-               // StringBuilder sb = new StringBuilder("https://api.appery.io/rest/1/apiexpress/api/Rimi_tooted/Tooted/");
+
 
             }
             catch(Exception e) {
@@ -265,6 +289,14 @@ public class ProductFragment extends Fragment {
 
 
             Log.e("asynctask", response);
+            pr.setVisibility(View.GONE);
+            price.setVisibility(View.VISIBLE);
+            product.setVisibility(View.VISIBLE);
+            quantity.setVisibility(View.VISIBLE);
+            plus.setVisibility(View.VISIBLE);
+            minus.setVisibility(View.VISIBLE);
+            addToCart.setVisibility(View.VISIBLE);
+
 
 
 
@@ -297,7 +329,7 @@ public class ProductFragment extends Fragment {
 
             product.setText(productFromDatabase.getProduct());
             pr = String.valueOf(productFromDatabase.getPrice());
-            price.setText(pr);
+            price.setText(pr + "€");
         }else{
        //     Toast.makeText(getContext(), "Toodet ei ole andmebaasis", Toast.LENGTH_LONG);
             product.setText("Toodet ei ole andmebaasis");
@@ -317,6 +349,8 @@ public class ProductFragment extends Fragment {
 
 
         }
+
+
 
 
 

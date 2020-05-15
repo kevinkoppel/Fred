@@ -24,12 +24,20 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore fStore;
 
     String UserId;
     TextView greeting;
+    static String[] appPermissions = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+    private static final int PERMISSIONS_REQUEST_CODE = 1240;
 
 
     @Override
@@ -39,12 +47,6 @@ public class MainActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         greeting = findViewById(R.id.textView3);
-
-        checkCameraPermissions();
-        checkLocationPermissions();
-
-
-
 
 
 
@@ -126,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 // Send token to your backend via HTTPS
                                 // ...
+                               // checkCameraPermissions();
+                               // checkLocationPermissions();
+                                hasPermissions();
                             } else {
                                 Toast.makeText(getApplicationContext(), "You arent registered", Toast.LENGTH_SHORT).show();
                                 Intent signUpIntent = new Intent(getApplicationContext(), SignUpActivity.class);
@@ -188,6 +193,22 @@ public class MainActivity extends AppCompatActivity {
                 1011
         );
     }
+    private boolean hasPermissions() {
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for(String perm : appPermissions){
+            if(ActivityCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED){
+                listPermissionsNeeded.add(perm);
+            }
+        }
+
+        if(!listPermissionsNeeded.isEmpty()){
+            ActivityCompat.requestPermissions(this,
+                    listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), PERMISSIONS_REQUEST_CODE);
+            return false;
+        }
+        return true;
+    }
+
 
 
 

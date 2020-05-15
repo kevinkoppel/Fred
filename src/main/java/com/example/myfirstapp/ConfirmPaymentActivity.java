@@ -20,8 +20,11 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,6 +42,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -64,19 +69,39 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
     public String totalPriceString;
 
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String storeName;
+
+    public TextView totalTextView;
+    ArrayList<ProductForCart> productList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        productList = new ArrayList<>();
+
         setContentView(R.layout.activity_confirm_payment);
         Intent recieveIntent = this.getIntent();
         totalPriceDouble = recieveIntent.getDoubleExtra("total", 15.0);
+        String lala = recieveIntent.getStringExtra("storeName");
+        setStoreName(lala);
 
         totalPriceString = String.valueOf(totalPriceDouble);
 
         TextView totalText = findViewById(R.id.textView10);
 
-        totalText.setText("Kokku: " + totalPriceString);
+        totalTextView = findViewById(R.id.totalPrice2);
+
+
 
 
 
@@ -137,14 +162,47 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String store = getStoreName();
+                Intent startIntent = new Intent(getApplicationContext(), BarCodeActivity.class);
+
+                startIntent.putExtra("store", store);
+                startActivity(startIntent);
 
 
-                finish();
             }
         });
+        final DatabaseReference cartListRef2 = FirebaseDatabase.getInstance().getReference().child("Cart List").child("User View")
+                .child(userId).child("Products");
 
 
-        //get paymentMethodId and customerId
+
+        cartListRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long value=dataSnapshot.getChildrenCount();
+                Log.d("listCount","no of children: "+value);
+
+                List<ProductForCart> productLisst = new ArrayList<>();
+                productList.clear();
+
+                for(DataSnapshot d : dataSnapshot.getChildren()){
+                    ProductForCart pr = d.getValue(ProductForCart.class);
+                    productList.add(pr);
+
+                }
+                String listSize = String.valueOf(productList.size());
+                //  String id = productList.get(2).getProductId();
+                //  Log.e("listCount","id "+ id);
+
+                Log.e("listCount","listSize: "+ listSize);
+                calculateTotalPrice();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -157,18 +215,16 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<ProductForCart, CartViewHolder> adapter = new FirebaseRecyclerAdapter<ProductForCart, CartViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull CartViewHolder cartViewHolder, int i, @NonNull final ProductForCart productForCart) {
-                DecimalFormat df = new DecimalFormat("#.##");
+
+
                 String productName = productForCart.getProduct();
                 String productQuantity = productForCart.getQuantity().toString();
 
-                String productPrice = df.format(productForCart.getPrice() * productForCart.getQuantity());
-                oneItemTotalPrice = Double.valueOf(productPrice);
-                totalPrice = totalPrice + oneItemTotalPrice;
-
                 cartViewHolder.txtProductName.setText(productName);
                 cartViewHolder.txtProductQuantity.setText("Kogus: " +productQuantity);
-                cartViewHolder.txtProductPrice.setText("Hind: " +productForCart.getPrice().toString() + "€");
-             //   total.setText("Kokku: " + totalPrice.toString());
+                cartViewHolder.txtProductPrice.setText(productForCart.getPrice().toString() + "€");
+
+                calculateTotalPrice();
                 cartViewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -176,19 +232,15 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
-                                    DecimalFormat df = new DecimalFormat("#.##");
-                                    String productPrice = df.format(productForCart.getPrice() * productForCart.getQuantity());
-                                    oneItemTotalPrice = Double.valueOf(productPrice);
-                                    totalPriceDouble = totalPriceDouble - oneItemTotalPrice;
 
-                                    totalText.setText("Kokku: " + df.format(totalPriceDouble));
+                                    String productId = productForCart.getProductId();
+
                                     Toast.makeText(getApplicationContext(), "Item removed successfully", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
                     }
                 });
-
             }
 
             @NonNull
@@ -224,24 +276,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         httpClient.newCall(request)
                 .enqueue(new PayCallback(this));
 
-        // .enqueue(new PayCallback(this));
 
-
-
-
-// Todo: makse postmanist toimib, nyyd tuleb siit ka toimima saada
-     /*   payButton.setOnClickListener((View view) -> {
-           // PaymentMethodCreateParams params = new PaymentMethodCreateParams.Card.Builder().setNumber("4242424242424242").setCvc()
-            final Context context = getApplicationContext();
-            stripe = new Stripe(
-                    context,
-                    PaymentConfiguration.getInstance(context).getPublishableKey()
-            );
-           // stripe.confirmPayment(this,confirmParams);
-
-
-
-        });*/
 
 
 
@@ -290,6 +325,8 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                             activity, "Error: " + e.toString(), Toast.LENGTH_LONG
                     ).show()
             );
+            Log.e("payment error1", e.toString());
+
         }
 
         @Override
@@ -305,12 +342,40 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                 activity, "Error: " + response.toString(), Toast.LENGTH_LONG
                         ).show()
                 );
+                Log.e("payment error2", response.toString());
             } else {
                 activity.onPaymentSuccess(response);
 
             }
 
         }
+    }
+    public void calculateTotalPrice(){
+        totalPrice = 0.0;
+
+        for (ProductForCart product: productList) {
+            double productPrice = product.getPrice();
+            int productQuantity = product.getQuantity();
+            double productTotalPrice = productPrice*productQuantity;
+            totalPrice = totalPrice + productTotalPrice;
+        }
+        DecimalFormat df = new DecimalFormat("#.##");
+        totalTextView.setText(df.format(totalPrice) + "€");
+
+    }
+    public void removeItem(String id){
+        int currentPosition = 0;
+        int indexToRemove = 10;
+        for(ProductForCart product : productList){
+            if(product.getProductId().equals(id)){
+                indexToRemove = currentPosition;
+            }
+            currentPosition++;
+
+        }
+        productList.remove(indexToRemove);
+        calculateTotalPrice();
+
     }
 
 }
