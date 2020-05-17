@@ -58,7 +58,16 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
     private OkHttpClient httpClient = new OkHttpClient();
     private Stripe stripe;
-    private Double totalPrice = 0.0;
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Double totalPrice;
 
     private String paymentIntentClientSecret;
     public String paymentMethod;
@@ -138,9 +147,10 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                                     Log.e("document", "DocumentSnapshot data: " + document.getData());
                                     paymentMethod = document.getString("paymentMethodId");
                                     customerId = document.getString("customerId");
-                                    pay(paymentMethod, customerId, totalPriceDouble);
-                                    final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List").child("User View").child(userId);
-                                    cartListRef.removeValue();
+                                    double amountToPay = getTotalPrice();
+                                    pay(paymentMethod, customerId, amountToPay);
+
+
 
                                 }else{
                                     Log.e("document", "No such document");
@@ -150,6 +160,7 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                             }
                         }
                     });
+
                 }
 
 
@@ -257,14 +268,14 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
 
     }
 
-    private void pay(String paymentMethodString, String customerIdString, double totalPrice) {
+    private void pay(String paymentMethodString, String customerIdString, double ttotalPrice) {
 
 
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         String json = "{"
                 + "\"customer\":\"" + customerIdString + "\","
                 + "\"paymentMethod\": \"" + paymentMethodString + "\","
-                + "\"amount\": " + totalPrice
+                + "\"amount\": " + ttotalPrice
                 + "}";
 
         RequestBody body = RequestBody.create(mediaType, json);
@@ -300,6 +311,30 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
                 getApplicationContext(),
                 Objects.requireNonNull(stripePublishableKey)
         );
+        userId = mAuth.getCurrentUser().getUid();
+        Log.e("document", userId );
+        DocumentReference docRef = fStore.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()){
+                        Log.e("document", "DocumentSnapshot data: " + document.getData());
+                        paymentMethod = document.getString("paymentMethodId");
+                        customerId = document.getString("customerId");
+
+                        final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart List").child("User View").child(userId);
+                        cartListRef.removeValue();
+
+                    }else{
+                        Log.e("document", "No such document");
+                    }
+                }else {
+                    Log.e("document", "get failed with", task.getException());
+                }
+            }
+        });
 
         Intent startIntent = new Intent(getApplicationContext(),PaymentCompletedActivity.class);
         startActivity(startIntent);
@@ -351,14 +386,15 @@ public class ConfirmPaymentActivity extends AppCompatActivity {
         }
     }
     public void calculateTotalPrice(){
-        totalPrice = 0.0;
+        Double temporaryTotalPrice = 0.0;
 
         for (ProductForCart product: productList) {
             double productPrice = product.getPrice();
             int productQuantity = product.getQuantity();
             double productTotalPrice = productPrice*productQuantity;
-            totalPrice = totalPrice + productTotalPrice;
+            temporaryTotalPrice = temporaryTotalPrice + productTotalPrice;
         }
+        setTotalPrice(temporaryTotalPrice);
         DecimalFormat df = new DecimalFormat("#.##");
         totalTextView.setText(df.format(totalPrice) + "€");
 

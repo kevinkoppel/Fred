@@ -25,6 +25,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     TextView goToRegistration;
 
     @Override
+    public void onBackPressed() {
+        return;
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);

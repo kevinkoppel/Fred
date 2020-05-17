@@ -48,6 +48,27 @@ import java.text.DecimalFormat;
 public class SecondActivity extends AppCompatActivity implements LocationListener {
     private FusedLocationProviderClient fusedLocationClient;
     int PERMISSION_ID = 44;
+
+    public Double getLatitude() {
+        if(latitude == null){
+            Intent startIntent = new Intent(getApplicationContext(),SecondActivity.class);
+            startActivity(startIntent);
+        }
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
     Double latitude, longitude;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -63,8 +84,6 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
 
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +95,6 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
         ImageButton profileButton = findViewById(R.id.profileButton2);
 
 
-
-       // getLocation();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -128,8 +145,10 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                 String distanceString;
                 double storeLatitude = store.getLatitude();
                 double storeLongitude = store.getLongitude();
-                double userLatitude = latitude;
-                double userLongitude = longitude;
+                double userLatitude = getLatitude();
+                double userLongitude = getLongitude();
+
+
 
 
                 // poe distantsi arvutus
@@ -153,8 +172,10 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                profileButton.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
+                       SecondActivity.this.finish();
                        Intent startIntent = new Intent(getApplicationContext(),ProfileActivity.class);
                        startActivity(startIntent);
+
                    }
                });
 
@@ -191,8 +212,9 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                        }else{
                            Intent startIntent = new Intent(getApplicationContext(),BarCodeActivity.class);
                            if(storeName.equals(laagriSelver)){
-                               startIntent.putExtra("store", "Laagri Selver");
-                               startActivity(startIntent);
+                              // startIntent.putExtra("store", "Laagri Selver");
+                              // startActivity(startIntent);
+                               Toast.makeText(getApplicationContext(), "Laagri Selver ei ole hetkel saadaval", Toast.LENGTH_SHORT).show();
                            }if (storeName.equals(hiiuRimi)){
                                startIntent.putExtra("store", "Hiiu Rimi");
                                startActivity(startIntent);
@@ -227,6 +249,12 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
         adapter.startListening();
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getLastLocation();
     }
 
     //kontrollib et kasutajal oleks asukoha näitamine lubatud
@@ -293,8 +321,10 @@ public class SecondActivity extends AppCompatActivity implements LocationListene
                     if (location == null) {
                         requestNewLocationData();
                     } else {
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
+                        setLatitude(location.getLatitude());
+                        setLongitude(location.getLongitude());
+                      //  latitude = location.getLatitude();
+                      //  longitude = location.getLongitude();
                     }
                 });
 

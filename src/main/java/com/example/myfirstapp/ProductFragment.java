@@ -1,7 +1,6 @@
 package com.example.myfirstapp;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -164,25 +163,27 @@ public class ProductFragment extends Fragment {
     }
 
     public void increaseInteger(){
+        DecimalFormat df = new DecimalFormat("#.##");
         if(quantityBox > 0) {
             quantityBox += 1;
             nr = String.valueOf(quantityBox);
             quantity.setText(nr);
             double priceWithQuantity = productFromDatabase.getPrice() * quantityBox;
             pr = String.valueOf(priceWithQuantity);
-            price.setText(pr + "€");
+            price.setText(df.format(priceWithQuantity) + "€");
         }else{
             return;
         }
     }
     public void decreaseInteger(){
+        DecimalFormat df = new DecimalFormat("#.##");
         if(quantityBox > 1) {
             quantityBox -= 1;
             nr = String.valueOf(quantityBox);
             quantity.setText(nr);
             double priceWithQuantity = productFromDatabase.getPrice() * quantityBox;
             pr = String.valueOf(priceWithQuantity);
-            price.setText(pr + "€");
+            price.setText(df.format(priceWithQuantity) + "€");
         }else{
             return;
         }
@@ -331,8 +332,11 @@ public class ProductFragment extends Fragment {
             pr = String.valueOf(productFromDatabase.getPrice());
             price.setText(pr + "€");
         }else{
-       //     Toast.makeText(getContext(), "Toodet ei ole andmebaasis", Toast.LENGTH_LONG);
-            product.setText("Toodet ei ole andmebaasis");
+            listener.onProductSent(cartProduct);
+            Toast.makeText(getContext(), "Antud toodet ei ole andmebaasis", Toast.LENGTH_LONG).show();
+
+
+           /* product.setText("Toodet ei ole andmebaasis");
             listener.onProductSent(cartProduct);
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Toode puudub");
@@ -345,7 +349,7 @@ public class ProductFragment extends Fragment {
                 }
             });
             AlertDialog dialog = builder.create();
-            dialog.show();
+            dialog.show();*/
 
 
         }
