@@ -7,6 +7,7 @@ Rakenduse testimiseks Android seadmel lae alla rakenduse apk. https://gofile.io/
 Test maksekaardi number: 4242 4242 4242 4242
 <br/><br/>
 Test triipkoodid: 
+<br/><br/>
 ![Triipkood 1](/barcode.png) 
 <br/><br/>
 <br/><br/>
