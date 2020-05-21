@@ -1,6 +1,6 @@
 # Fred
 
-Rakenduse testimiseks Android seadmel lae alla rakenduse apk. https://easyupload.io/9s7z1v
+Rakenduse testimiseks Android seadmel lae alla rakenduse apk. https://easyupload.io/qmsyji
 
 ### Rakenduse testimise lisainfo: 
 <br/><br/>
